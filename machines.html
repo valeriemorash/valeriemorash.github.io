@@ -1,0 +1,92 @@
+<head>
+<title>Valerie Morash</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
+</head>
+<body>
+<div class="shell">
+  <div class="border">
+    <div id="header">
+      <h1 id="logo"><a href="index.html" class="notext">Valerie Morash</a></h1>
+      <div class="cl">&nbsp;</div>
+    </div>
+    <ul id="navbar">
+        <li><a href="index.html">ABOUT</a></li>
+        <li><a href="research.html">RESEARCH</a></li>
+        <li><a href="publications.html">PUBLICATIONS</a></li>
+        <li><a class="active">RESEARCH MATERIALS</a><ul>
+          <li><a href="stimuli.html">Perceptual Stimuli</a></li><br>
+          <li><a href="code.html">Code</a></li><br>
+          <li><a href="machines.html">Machines</a></li><br>
+          <li><a href="surveys.html">Surveys</a></li><br>
+          <li><a href="assessment.html">Assessments & Archives</a></li></ul>
+          </li>
+      <div class="cl">&nbsp;</div>
+    </ul>
+    <div id="main">
+        <div class="highlight" style="height:600px">
+          <h2>Infant Simulator</h2>
+          <br>
+          Coming soon.
+          <br><br>
+          <h2>Stimulus Delivery</h2>
+          <br>
+          <div class="wrapper" style="padding-left:20px">
+          <iframe title="YouTube video player" class="youtube-player" type="text/html" 
+              width="320" height="240" style="padding-bottom:20px" src="http://www.youtube.com/embed/VHswlvxO8eg?rel=0"
+              frameborder="0" allowFullScreen></iframe>
+          <br>
+          <iframe title="YouTube video player" class="youtube-player" type="text/html" 
+              width="320" height="240" src="http://www.youtube.com/embed/RuJRCwtX0mY?rel=0"
+              frameborder="0" allowFullScreen></iframe>
+          </div>
+          <p>Changing physical stimuli between trials can be tedious or impossible if it is a long experiment. To deal with this issue, I have created this machine to automate the process of presenting stimuli. This also reduces the risk of errors in stimulus presentation.</p>
+          The machine uses a Phidgets controller board, two linear actuators, and two precision glides. The structure is made from laser-cut acrylic (much of it scrap, which is why it looks a little oddly shaped). Matlab controls the flow of the experiment, and during a trial it moves the appropriate stimulus under the participant's finger, which is between two vertical blinders.</p>
+          <p>These videos show Matlab moving the device from the right-most stimulus to the left-most stimulus, and back again. The side view shows how this movement is achieved quickly using two stacked linear actuators. The two levels, one above each linear actuator, are each supported by one glide. In the side-view video, glides are not visible because they are directly behind the linear actuators. Any information inferred from actuator noise can be easily obscured with random movements between trials and/or playing white noise through a speaker.</p>
+          <h4>Parts List:</h4>
+          <ul style="padding-left:20px">
+          <li>PhidgetAdvancedServo 8-Motor Controller, www.phidgets.com</li>
+          <li>2 x 100mm Stroke RC Linear Actuator, part L12-100-100-06-R, www.phidgets.com</li>
+          <li>2 x 4-Inch Travel Anti-Creep Linear Ball Slide, part E-5AC, www.deltron.com</li>
+          </ul>
+      </div>
+    </div>
+    <div id="main">
+      <div class="highlight">
+          <h2>Two-Point Threshold Machine</h2>
+          <br>
+          <div class="wrapper" style="padding-left:20px">
+          <iframe title="YouTube video player" class="youtube-player" type="text/html" 
+              width="320" height="240" style="padding-bottom:40px" src="http://www.youtube.com/embed/JouESZWJpiM?rel=0"
+              frameborder="0" allowFullScreen> </iframe>
+        </div>
+          <p>The two-point threshold is one of the oldest measures of tactile sensitivity. Best performance with the two-point threshold is obtained when it is administered as a 2-alternative forced choice task, where the participant is presented with either one or two points, and must indicate whether there is one or two. "One" point is actually the two points placed with no separation.</p>
+          <p> Each person's two-point threshold is determined using an adaptive staircase "two-up one-down" procedure. This procedure would be very tedious to do manually, but is easily administered by my two-point threshold machine.</p>
+          <p>The machine is constructed from laser-cut acrylic and various electronics/actuators. The points were taken from a commercial two-point threshold device. Each point is mounted on a linear actuator, to move the points (independently) up and down. The actuators sit atop linear ball slides, which move back and forth, increasing and decreasing the points' separation. The back-and-forth movement is controlled by a servo and rack and pinion, i.e., one circular and one linear gear (one servo, rack, and pinion for each slide). All the movement is controlled through Matlab with a Phidget controller. The video shows various views of the machine and some of the machine in action.</p>
+          <p>This machine was used in the following publications,<br>
+          Morash, V., Connell Pensky, A., & Miele, J. (2013). Effects of using multiple hands and fngers on haptic performance. Perception, 42, 759-777.<br>
+          Morash, V., Connell Pensky, A., Tseng, S.T.W., & Miele, J. (2014). Effects of using multiple hands and fingers on haptic performance in individuals who are blind. Perception, 43, 569-588.</p><br>
+          <h4>Parts List:</h4>
+          <ul style="padding-left:20px">
+          <li>PhidgetAdvancedServo 8-Motor Controller, www.phidgets.com</li>
+          <li>2 x 50mm Stroke RC Linear Actuator, part L12-30-50-06-R, www.phidgets.com</li>
+          <li>2 x 2-Inch Travel Precision Linear Ball Slide, part M-3SS, www.deltron.com</li>
+          <li>2 x Deluxe Servo, part Hitec HS-422, www.phidgets.com</li>
+          <li>2 x Gear Rack Straight Tooth, part R4M-25, www.wmberg.com</li>
+          <li>2 x Spur Gear Pin Hub, part PJS80-32, www.wmberg.com</li>
+          <li>2 x 1/4" Servo Shaft Coupler, part HSA-250, www.servocity.com</li>
+          <li>2 x Points from the Two-Point Aesthesiometer, part 16011, www.lafayetteinstrument.com</li>
+          </ul>
+        </div>
+        
+    <div class="cl">&nbsp;</div>
+    </div>
+    <div class="shadow-l"></div>
+    <div class="shadow-r"></div>
+    <div class="shadow-b"></div>
+  </div>
+</div>
+</body>
+</html>
+
+</html>

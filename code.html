@@ -1,0 +1,124 @@
+<head>
+<title>Valerie Morash</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
+<link rel="shortcut icon" href="images/favicon2.png" />
+</head>
+<body>
+<div class="shell">
+  <div class="border">
+    <div id="header">
+      <h1 id="logo"><a href="index.html" class="notext">Valerie Morash</a></h1>
+      <div class="cl">&nbsp;</div>
+    </div>
+    <ul id="navbar">
+        <li><a href="index.html">ABOUT</a></li>
+        <li><a href="research.html">RESEARCH</a></li>
+        <li><a href="publications.html">PUBLICATIONS</a></li>
+        <li><a class="active">RESEARCH MATERIALS</a><ul>
+        	<li><a href="stimuli.html">Perceptual Stimuli</a></li><br>
+        	<li><a href="code.html">Code</a></li><br>
+        	<li><a href="machines.html">Machines</a></li><br>
+			<li><a href="surveys.html">Surveys</a></li><br>
+			<li><a href="assessment.html">Assessments & Archives</a></li></ul>
+		</li>
+      <div class="cl">&nbsp;</div>
+    </ul>
+    <div id="main">
+      <div>
+        <div class="highlight">
+
+          
+          <h2>Finger Tracking Using Ridge Detection</h2>
+          <br>
+          <p>I developed a video-based finger tracking algorithm with Bas van der Velden. This very simple algorithm exploits the fact that fingertips have the highest "ridges" in videos of hand movements. The results using this code and video are shown below, where the red asterisk marks the estimated index fingertip position.</p>
+          <p>These three videos can be viewed simultaneously <a href="https://www.youtube.com/watch?v=V1VT4rvSCiU">here</a>.</p>
+          <p><a href="code/finger tracking using ridge detection/code.zip" class="more">Download Matlab Code</a></p>
+          <p><a href="code/finger tracking using ridge detection/images.zip" class="more">Download Example Video Frames</a></p>
+          <br>
+          <div class="content" align="center">
+			<figure style="float: center;  display:inline-block; margin-top: 10px; margin-bottom: 0px; padding: 0px ">
+				<iframe title="YouTube video player" class="youtube-player" type="text/html" 
+              	width="280" height="210" src="http://www.youtube.com/embed/cL1HKGleLew?rel=0"
+              	frameborder="0" allowFullScreen></iframe>
+              	<iframe title="YouTube video player" class="youtube-player" type="text/html" 
+              	width="280" height="210" src="http://www.youtube.com/embed/m7vYZM8AuLo?rel=0"
+              	frameborder="0" allowFullScreen></iframe>
+              	<iframe title="YouTube video player" class="youtube-player" type="text/html" 
+              	width="280" height="210" src="http://www.youtube.com/embed/zeB9pBXBY1Q?rel=0"
+              	frameborder="0" allowFullScreen></iframe>
+            </figure>
+           </div>
+			<br>
+		  <h2>Search Trajectory Simulations</h2>
+			<div class="content" align="center">
+				<figure style="float: center;  display:inline-block; margin-top: 0px; margin-bottom: 0px; padding: 0px ">
+				<img src='code/movement trajectory simulation/examples/ballisticExample.png' alt='missing' width=200px/>
+				<figcaption>Ballistic</figcaption>
+				</figure>
+				<figure style="float: center;  display:inline-block; margin-top: 0px; margin-bottom: 0px; padding: 0px">
+				<img src='code/movement trajectory simulation/examples/levyExample.png' alt='missing' width=200px/>
+				<figcaption>Levy Walk</figcaption>
+				</figure>
+				<figure style="float: center;  display:inline-block; margin-top: 0px; margin-bottom: 0px; padding: 0px">
+				<img src='code/movement trajectory simulation/examples/brownianExample.png' alt='missing' width=200px/>
+				<figcaption>Brownian Motion</figcaption>
+				</figure>
+				
+				<br>
+
+				<figure style="float: center;  display:inline-block; margin-top: 0px; margin-bottom: 0px; padding: 0px">
+				<img src='code/movement trajectory simulation/examples/zigzagExample.png' alt='missing' width=200px/>
+				<figcaption>Zig Zag</figcaption>
+				</figure>
+
+				<figure style="float: center;  display:inline-block; margin-top: 0px; margin-bottom: 0px; padding: 0px">
+				<img src='code/movement trajectory simulation/examples/parallelExample.png' alt='missing' width=200px/>
+				<figcaption>Parallel Sweeps</figcaption>
+				</figure>
+
+				<figure style="float: center;  display:inline-block; margin-top: 0px; margin-bottom: 0px; padding: 0px">
+				<img src='code/movement trajectory simulation/examples/spiralExample.png' alt='missing' width=200px/>
+				<figcaption>Archimedes Spiral</figcaption>
+				</figure>
+
+				<figure style="float: center;  display:inline-block; margin-top: 0px; margin-bottom: 0px; padding: 0px">
+				<img src='code/movement trajectory simulation/examples/squareExample.png' alt='missing' width=200px/>
+				<figcaption>Expanding Square</figcaption>
+				</figure>
+
+				
+			</div> </br>
+
+
+		  <p> I created a Matlab program that simulates search trajectories for the search for a target in a bounded area using different strategies. This program simulates search for ballistic motion, Levy walk (accepting any value of mu larger than 1), Brownian motion (Levy with mu larger than 3), parallel sweeps, zig zag, spiral, and expanding square. The function returns the distance traversed by the searcher, and has the option for creating a plot of the trajectory. The function allows for the user to select the detection radius, start location, and target location. Example plots below show output plots for a search beginning at the green circle and ending at the red circle (same target in all plots).</p>
+		  <p><a href="code/movement trajectory simulation/randomSearchDistance.m" class="more">Download m File</a>.</p>
+
+          <h2>Response Time GUI</h2>
+
+			<div class="content" align="center">
+			<figure style="float: center;  display:inline-block; margin-top: 0px; margin-bottom: 0px; padding: 0px">
+			    <img src='images/findRT.png' alt='missing' />
+			</figure>
+			</div> </br>
+
+          <p> This program runs in Matlab, and is useful for extracting response times from audio recordings made during a psychological study.</p>
+		  <p>
+          <a href="code/response time GUI/code.zip" class="more">Download Code </a></p>
+          <p><a href="code/response time GUI/instructions.pdf" class="more">Download Instructions</a></p>
+
+          </p>This program was used in the following publications, </br>
+		  Morash, V., Connell Pensky, A., Tseng, S.T.W., & Miele, J. (2014). Effects of using multiple hands and fingers on haptic performance in individuals who are blind. <i>Perception</i>, <i>43</i>, 569-588.</br>
+          Morash, V., Connell Pensky, A., & Miele, J. (2013). Effects of using multiple hands and fingers on haptic performance. <i>Perception</i>, <i>42</i>, 759-777.</p>
+        </div>
+      </div>
+      <div class="cl">&nbsp;</div>
+    </div>
+    <div class="shadow-l"></div>
+    <div class="shadow-r"></div>
+    <div class="shadow-b"></div>
+  </div>
+</div>
+</body>
+</html>
+          

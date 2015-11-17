@@ -274,7 +274,13 @@ function generateText(){
 	}
 
 	// Caption
-	if(captionExist) text += " A caption reads ''" + captionText + ".''";
+	if(captionExist){
+		text += " A caption reads ''" + captionText;
+		if(captionText.slice(captionText.length-1)!=="."){
+			text += ".";
+		}
+		text += "''";
+	}
 
 
 	//X Axis
@@ -412,12 +418,19 @@ function generateText(){
 
 		if(dataTrendExist){
 			text += " and has a trend of " + dataDescriptionArray[i][3];
+			var a = dataDescriptionArray[i][3];
+			if(a.slice(a.length-1)!=="."){
+				text += ".";
+			}
 		}
 	}
 
 
 	if(trendExist){
 		text += " " + trendText;
+		if(trendText.slice(trendText.length-1)!=="."){
+			text += ".";
+		}
 	}
 
 	if(tableExist){
@@ -487,6 +500,7 @@ function setDescriptionType(value){
 		askCircles(false);
 		setBarsClustered(barsClustered);
 		askTable(tableExist);
+		setTable(tableExist);
 		
 		switch(descriptionType){
 			case 1:
@@ -699,6 +713,8 @@ function setTable(value){
 	tableExist = value;
 	var x = document.getElementById("generatedTableEntryDiv");
 	x.style.display = value ? "block" : "none";
+	document.getElementById("tableQyes").checked = value;
+	document.getElementById("tableQno").checked = !value;
 	askDataQuestions();
 }
 
@@ -1424,8 +1440,10 @@ function updateDataPointsOfTypeNumber(row,value){
 	}
 	if(sum > 0){
 		tableRecDivID.innerHTML = "A data table is only recommended if there are 10 or fewer points per point type.<br>A table is not recommended for this scatter plot.<br>";
+			setTable(false);
 	} else {
 		tableRecDivID.innerHTML = "A data table is only recommended if there are 10 or fewer points per point type.<br>A table would be acceptable for this scatter plot.<br>";
+			setTable(true);
 	}
 
 	askDataQuestions();
@@ -1878,8 +1896,8 @@ Please write a general description of any obvious data trends. <br>
 <div id="tableRecommendationDiv">
 </div>
 Do you want to create a data table?
-<input type="radio" name="tableQ" value="yes" onclick="setTable(true)"> Yes
-<input type="radio" name="tableQ" value="no" onclick="setTable(false)"> No
+<input type="radio" name="tableQ" id="tableQyes" value="yes" onclick="setTable(true)"> Yes
+<input type="radio" name="tableQ" id="tableQno" value = "no" onclick="setTable(false)"> No
 <div id="generatedTableEntryDiv">
 </div>
 </div>

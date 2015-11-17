@@ -1,0 +1,1931 @@
+<html>
+<head>
+<title>Valerie Morash</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
+
+<script type="text/javascript">
+<!--
+
+//////////////////////////////////////////////////////////////
+// INITIALIZE GLOBAL VARIABLES ///////////////////////////////
+//////////////////////////////////////////////////////////////
+
+var descriptionType = 0;
+
+var titleExist;
+var titleText;
+
+var captionExist;
+var captionText;
+
+var yLabelExist;
+var yLabelText;
+var yUnitsExist;
+var yUnitsText;
+
+var yMinNumber;
+var yMaxNumber;
+var yIncrementNumber;
+
+var xLabelExist;
+var xLabelText;
+var xUnitsExist;
+var xUnitsText;
+var xMinNumber;
+var xMaxNumber;
+var xIncrementNumber;
+
+var trendExist;
+var trendText;
+
+var tableExist;
+var barsClustered;
+var numberBarsClusters;
+
+var dataTypesNumber;
+var dataColorsExist;
+var dataPatternsExist;
+var dataLabelExist;
+var dataUnitsExist;
+var dataUnitsText;
+var dataPercentagesExist;
+
+var dataDescriptionArray;
+//Label, color, pattern, trend, quantity
+
+var dataTableArray;
+
+var pointsNumber;
+var pointsNumberExact;
+
+var circlesNumber;
+var circlesIntersectionsNumber;
+var circlesIntersectionsNames;
+var circlesIntersectionsOptions;
+
+
+//////////////////////////////////////////////////////////////
+// FUNCTIONS /////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+
+function initializeVariables(){
+	switch(descriptionType){
+		case 1: //Horizontal Bar Chart
+		case 2: //Vertical Bar Chart
+			dataTableArray = [[undefined]];
+			trendExist = true;
+			break;
+		case 3: //Line Graph
+			dataTableArray = [[undefined]];
+			trendExist = false;
+			break;
+		case 4: //Pie Chart
+			dataTableArray = [[]];
+			trendExist = false;
+			break;
+		case 5: //Scatter Plot
+			dataTableArray = [[undefined, undefined]];
+			trendExist = false;
+			break;
+		case 6: //Venn Diagram
+			dataTableArray = [[]];
+			trendExist = false;
+			break;
+	}
+
+	titleExist = true;
+	titleText = "";
+
+	captionExist = true;
+	captionText = "";
+
+	yLabelExist = true;
+	yLabelText = "";
+	yUnitsExist = true;
+	yUnitsText = "";
+
+	yMinNumber = NaN;
+	yMaxNumber = NaN;
+	yIncrementNumber = NaN;
+
+	xLabelExist = true;
+	xLabelText = "";
+	xUnitsExist = true;
+	xUnitsText = "";
+	xMinNumber = NaN;
+	xMaxNumber = NaN;
+	xIncrementNumber = NaN;
+
+	trendText = "";
+
+	tableExist = true;
+	barsClustered = false;
+	numberBarsClusters = NaN;
+
+	dataTypesNumber = 1;
+	dataColorsExist = false;
+	dataPatternsExist = false;
+	dataLabelExist = [];
+	dataUnitsExist = false;
+	dataUnitsText = "";
+	dataPercentagesExist = false;
+
+	dataDescriptionArray = [["","","","",""]];
+	//Label, color, pattern, trend, quantity
+
+	pointsNumber = NaN;
+	pointsNumberExact = true;
+
+	circlesNumber = 0;
+	circlesIntersectionsNumber = 0;
+	circlesIntersectionsNames = [];
+	circlesIntersectionsOptions = [];
+
+}
+
+///////////////////////////////////
+// GENERATE DESCRIPTION FUNCTION //
+///////////////////////////////////
+
+function updateDescription(){
+	var x1 = document.getElementById("outputTextDiv");
+	var x2 = document.getElementById("outputTableDiv");
+	x1.style.display = "block";
+	x2.style.display = "block";
+	generateText();
+}
+
+function generateText(){
+	var text = "";
+
+	switch(descriptionType){
+		case 1: //Horizontal Bar Chart
+			var item = "bar";
+			var itemC = "Bar";
+			var descriptionTypeName = "horizontal bar chart";
+			break;
+		case 2: //Vertical Bar Chart
+			var item = "bar";
+			var itemC = "Bar";
+			var descriptionTypeName = "vertical bar chart";
+			break;
+		case 3: //Line Graph
+			var item = "line";
+			var itemC = "Line";
+			var descriptionTypeName = "line graph";
+			break;
+		case 4: //Pie chart
+			var item = "wedge";
+			var descriptionTypeName = "pie chart";
+			var itemC = "Wedge";
+			break;
+		case 5: //Scatter Plot
+			var item = "point type";
+			var itemC = "Point type";
+			var descriptionTypeName = "scatter plot";
+			break;
+		case 6: //Venn Diagram
+			var item = "circle";
+			var itemC = "Circle";
+			var descriptionTypeName = "Venn diagram"
+			break;
+	}
+
+	//TITLE
+	text = "This is a " + descriptionTypeName;
+	if(titleExist) text += ", titled " + titleText;
+
+	//NUMBER OF DATA LINES/WEDGES/CIRCLES/POINT TYPES/BARS
+	switch(descriptionType){
+		case 1: //Horizontal Bar Chart
+			if(xUnitsExist) text += ", showing " + xUnitsText;
+			text += " with " + numberBarsClusters;
+
+			if(yLabelExist){
+				text += " " + yLabelText + ".";
+			} else {
+				if(barsClustered){
+					text += " clusters of " + dataTypesNumber + " bars.";
+				} else {
+					text += " bars.";
+				}
+			}
+			break;
+		case 2: //Vertical Bar Chart
+			if(yUnitsExist) text += ", showing " + yUnitsText;
+
+			text += " with " + numberBarsClusters;
+
+			if(xLabelExist){
+				text += " " + xLabelText + ".";
+			} else {
+				if(barsClustered){
+					text += " clusters of " + dataTypesNumber + " bars.";
+				} else {
+					text += " bars.";
+				}
+			}
+			break;
+		case 3: //Line Graph
+			text += ", showing " + dataTypesNumber;
+			if(dataTypesNumber>1){
+				text += " lines.";
+			} else {
+				text += " line.";
+			}
+			break;
+		case 4: //Pie chart
+			text += ", showing " + dataTypesNumber + " wedges";
+			break;
+		case 5: //Scatter Plot
+			text += ", showing " + dataTypesNumber;
+			if(dataTypesNumber>1){
+				text += " point types.";
+			} else {
+				text += " point type.";
+			}
+			break;
+		case 6: //Venn Diagram
+			text += ", showing " + circlesNumber + " circles and " + circlesIntersectionsNumber;
+			if(circlesIntersectionsNumber > 1){
+				text += " intersections";
+			} else {
+				text += " intersection"
+			}
+			break;
+	}
+
+	if(descriptionType == 4 || descriptionType == 6){
+		switch(dataUnitsExist*10 + dataPercentagesExist){
+			case 0: //No units
+				text += ".";
+			break;
+			case 1: //Percentages
+				text += ", measured in percentages.";
+			break;
+			case 10: //Units
+				text += ", measured in " + dataUnitsText + ".";
+			break;
+			case 11: //Percentages and units
+				text += ", measured in " + dataUnitsText + " and percentages.";
+			break;
+		}
+	}
+
+	// Caption
+	if(captionExist) text += " A caption reads ''" + captionText + ".''";
+
+
+	//X Axis
+	if(descriptionType==1 || descriptionType ==3 || descriptionType == 5){
+			text += " The horizontal x-axis ";
+			if(xLabelExist){
+				text += "is labeled " + xLabelText + ", and ";
+			}
+			text += "ranges from " + xMinNumber + " to " + xMaxNumber;
+			text += " in increments of " + xIncrementNumber;
+			if(xUnitsExist){
+				text += " " + xUnitsText + ".";
+			} else {
+				text += ".";
+			}
+	}
+
+	//Y Axis
+	if(descriptionType ==2 || descriptionType==3 || descriptionType == 5){
+		text += " The vertical y-axis ";
+			if(yLabelExist){
+				text += "is labeled " + yLabelText + ", and ";
+			}
+			text += "ranges from " + yMinNumber + " to " + yMaxNumber;
+			text += " in increments of " + yIncrementNumber;
+			if(yUnitsExist){
+				text += " " + yUnitsText + ".";
+			} else {
+				text += ".";
+			}
+	}
+
+
+	// if(descriptionType <= 2 || descriptionType == 4){
+	// 	if(!barsClustered){
+	// 		for(var k=0;k<dataLabelExist.length;k++){
+	// 			dataLabelExist[k] = false;
+	// 		}
+	// 	}
+	// }
+		
+	if(dataColorsExist || dataPatternsExist){
+		text += " The " + item + "s have different ";
+		if(dataColorsExist) {text += "colors";}
+		if(dataColorsExist && dataPatternsExist) {text += " and ";}
+		if(dataPatternsExist) {text += "patterns";}
+		text += ".";
+	}
+
+	if(descriptionType==3 || descriptionType==5){
+		var dataTrendExist = true;
+	} else {
+		var dataTrendExist = false;
+	}
+
+	for (var i = 0; i < dataTypesNumber; i++) {
+		if(descriptionType==6 && i >= circlesNumber){
+			var k = i-circlesNumber;
+			if(dataColorsExist || dataPatternsExist || dataTrendExist){
+				text += " Intersection " + (k+1);
+				if(dataLabelExist[i]){
+					text += " is labeled " + dataDescriptionArray[i][0];
+					if(dataColorsExist || dataPatternsExist || dataTrendExist){
+						text += ",";
+					} else {
+						text += ".";
+					}
+				}
+				if (typeof circlesIntersectionsNames[k] !== 'undefined' && circlesIntersectionsNames[k].length > 0){
+
+					text += " is between";
+					for(var j=0;j<(circlesIntersectionsNames[k].length-1);j++){
+						text += " " + circlesIntersectionsNames[k][j];
+					}
+					if(circlesIntersectionsNames[k].length>2){
+						text += ",";
+					}
+					j=(circlesIntersectionsNames[k].length-1);
+					text += " and " + circlesIntersectionsNames[k][j];
+
+					if(dataColorsExist || dataPatternsExist || dataTrendExist){
+						text += ",";
+					} else {
+						text += ".";
+					}
+				}
+			}
+		} else {
+			text += " " + itemC + " " + (i+1);
+			if(dataLabelExist[i]){
+				text += " is labeled " + dataDescriptionArray[i][0];
+				if(dataColorsExist || dataPatternsExist || dataTrendExist){
+					text += ",";
+				} else {
+					text += ".";
+				}
+			}
+		}
+
+		if (dataColorsExist) {
+			if(dataPatternsExist || dataTrendExist){
+				text += " is colored " + dataDescriptionArray[i][1] + ",";
+			} else {
+				text += " and is colored " + dataDescriptionArray[i][1] + ".";
+			}
+		}
+
+		if (dataPatternsExist) {
+			if(dataTrendExist){
+				text += " has " + dataDescriptionArray[i][2] + " pattern,";
+			} else {
+				text += " and has " + dataDescriptionArray[i][2] + " pattern.";
+			}
+		}
+
+		if(dataTrendExist){
+			text += " and has a trend of " + dataDescriptionArray[i][3];
+		}
+	}
+
+
+	if(trendExist){
+		text += " " + trendText;
+	}
+
+	if(tableExist){
+		text += " Data are presented in the table below.<br><br>"
+		generateTable(false);
+		generateTable(true);
+	}
+
+	out = document.getElementById("outputTextDiv");
+	out.innerHTML = text;
+
+	var x = document.getElementById("outputTableDiv");
+	x.style.display = tableExist ? "block" : "none";
+
+}
+
+//////////////
+// SET TYPE //
+//////////////
+
+function setDescriptionType(value){
+	
+	var confirmChangeType = true;
+	if(descriptionType!==0 && descriptionType !== value){
+		var r = confirm("Changing your image type will cause existing information to be lost. It's recommended that the page be re-loaded between switching image types. Are you sure you want to switch types?");
+		if (r == true) {
+			confirmChangeType = true;
+		} else {
+		    confirmChangeType = false;
+		}
+	}
+
+	if(descriptionType == value){
+		confirmChangeType = false;
+	}
+
+	if(confirmChangeType){
+		descriptionType = value;
+		var divs = ["imageTypeHorizontalBarChartDiv",
+			"imageTypeVerticalBarChartDiv",
+			"imageTypeLineGraphDiv",
+			"imageTypePieChartDiv",
+			"imageTypeScatterPlotDiv",
+			"imageTypeVennDiagramDiv"];
+		for(i=0;i<6;i++){
+			divID = document.getElementById(divs[i]);
+			divID.style.border = "1px solid gray";		
+			}
+		
+		divID = document.getElementById(divs[descriptionType-1]);
+		divID.style.border = "3px solid red";
+
+		initializeVariables();
+
+		tableRecDivID = document.getElementById("tableRecommendationDiv");
+		askXLabel(false);
+		askXUnits(false);
+		askXValues(false);
+		askYLabel(false);
+		askYUnits(false);
+		askYValues(false);
+		askOverallTrends(false);
+		askBars(false);
+		askLines(false);
+		askPoints(false);
+		askWedges(false);
+		askCircles(false);
+		setBarsClustered(barsClustered);
+		askTable(tableExist);
+		
+		switch(descriptionType){
+			case 1:
+				askXLabel(true);
+				askXUnits(true);
+				askXValues(true);
+				askYLabel(true);
+				askYUnits(true);
+				askOverallTrends(true);
+				askBars(true);
+				tableRecDivID.innerHTML = "A data table is always recommended for bar charts.";
+				break;
+			case 2:
+				askXLabel(true);
+				askXUnits(true);
+				askYLabel(true);
+				askYUnits(true);
+				askYValues(true);
+				askOverallTrends(true);
+				askBars(true);
+				tableRecDivID.innerHTML = "A data table is always recommended for bar charts.";
+				break;
+			case 3:
+				askXLabel(true);
+				askXUnits(true);
+				askXValues(true);
+				askYLabel(true);
+				askYUnits(true);
+				askYValues(true);
+				askLines(true);
+				tableRecDivID.innerHTML = "A data table is always recommended for line graphs.";
+				break;
+			case 4: //Pie Chart (wedges)
+				askWedges(true);
+				tableRecDivID.innerHTML = "A data table is always recommended for pie charts.";
+				break;
+			case 5:
+				askXLabel(true);
+				askXUnits(true);
+				askXValues(true);
+				askYLabel(true);
+				askYUnits(true);
+				askYValues(true);
+				askPoints(true);
+				tableRecDivID.innerHTML = "A data table is only recommended if there are 10 or fewer points per point type.";
+				break;
+			case 6:
+				askCircles(true);
+				tableRecDivID.innerHTML = "A data table is always recommended for Venn diagrams.";
+				break;
+		}
+		askDataQuestions();
+	}
+
+}
+
+///////////
+// TITLE //
+///////////
+function setTitle(value){
+	var x = document.getElementById("titleTextDiv");
+	x.style.display = value ? "block" : "none";
+	titleExist = value;
+	askDataQuestions();
+}
+function updateTitleText(x){
+	titleText = x;
+	askDataQuestions();
+}
+
+/////////////
+// CAPTION //
+/////////////
+function setCaption(value){
+	var x = document.getElementById("captionTextDiv");
+	x.style.display = value ? "block" : "none";
+	captionExist = value;
+	askDataQuestions();
+}
+
+function updateCaptionText(x){
+	captionText = x;
+	askDataQuestions();
+}
+
+/////////////////
+// X FUNCTIONS //
+/////////////////
+function setXLabel(value){
+	var x = document.getElementById("xLabelTextDiv");
+	x.style.display = value ? "block" : "none";
+	xLabelExist = value;
+	askDataQuestions();
+}
+
+function updateXLabelText(x){
+	xLabelText = x;
+	askDataQuestions();
+}
+
+function setXUnits(value){
+	var x = document.getElementById("xUnitsTextDiv");
+	x.style.display = value ? "block" : "none";
+	xUnitsExist=value;
+	askDataQuestions();
+}
+
+function updateXUnitsText(x){
+	xUnitsText = x;
+	askDataQuestions();
+}
+
+function updateXMinNumber(x){
+	xMinNumber = parseFloat(x);
+	updateDataTypesNumber(dataTypesNumber);
+	askDataQuestions();
+}
+
+function updateXMaxNumber(x){
+	xMaxNumber = parseFloat(x);
+	updateDataTypesNumber(dataTypesNumber);
+	askDataQuestions();
+}
+
+function updateXIncrementNumber(x){
+	xIncrementNumber = parseFloat(x);
+	updateDataTypesNumber(dataTypesNumber);
+	askDataQuestions();
+}
+
+function askXLabel(value){
+	var x = document.getElementById("askXLabelDiv");
+	x.style.display = value ? "block" : "none";
+}
+
+function askXUnits(value){
+	var x = document.getElementById("askXUnitsDiv");
+	x.style.display = value ? "block" : "none";
+}
+
+function askXValues(value){
+	var x = document.getElementById("askXValuesDiv");
+	x.style.display = value ? "block" : "none";
+}
+
+
+/////////////////
+// Y FUNCTIONS //
+/////////////////
+function setYLabel(value){
+	var x = document.getElementById("yLabelTextDiv");
+	x.style.display = value ? "block" : "none";
+	yLabelExist = value;
+	askDataQuestions();
+
+}
+
+function updateYLabelText(x){
+	yLabelText = x;
+	askDataQuestions();
+}
+
+function setYUnits(value){
+	var x = document.getElementById("yUnitsTextDiv");
+	x.style.display = value ? "block" : "none";
+	yUnitsExist = value;
+	askDataQuestions();
+}
+
+function updateYUnitsText(x){
+	yUnitsText = x;
+	askDataQuestions();
+}
+
+function askYLabel(value){
+	var x = document.getElementById("askYLabelDiv");
+	x.style.display = value ? "block" : "none";
+}
+
+function askYUnits(value){
+	var x = document.getElementById("askYUnitsDiv");
+	x.style.display = value ? "block" : "none";
+}
+
+function askYValues(value){
+	var x = document.getElementById("askYValuesDiv");
+	x.style.display = value ? "block" : "none";
+}
+
+function updateYMinNumber(x){
+	yMinNumber = parseFloat(x);
+	askDataQuestions();
+}
+
+function updateYMaxNumber(x){
+	yMaxNumber = parseFloat(x);
+	askDataQuestions();
+}
+
+function updateYIncrementNumber(x){
+	yIncrementNumber = parseFloat(x);
+	askDataQuestions();
+}
+
+/////////////////////
+// TABLE FUNCTIONS //
+/////////////////////
+
+function setTable(value){
+	tableExist = value;
+	var x = document.getElementById("generatedTableEntryDiv");
+	x.style.display = value ? "block" : "none";
+	askDataQuestions();
+}
+
+function askTable(value){
+	var x = document.getElementById("askTableDiv");
+	x.style.display = value ? "block" : "none";
+}
+
+////////////////////////////
+// GENERIC DATA FUNCTIONS //
+////////////////////////////
+
+function setDataColors(value){
+	dataColorsExist = value;
+	askDataQuestions();
+}
+
+function setDataPatterns(value){
+	dataPatternsExist = value;
+	askDataQuestions();
+}
+
+function setDataLabelsExist(i,value){
+	dataLabelExist[i-1] = value;
+	var x = document.getElementById("dataPointsLabelDiv" + i);
+	x.style.display = value ? "block" : "none";
+	askDataQuestions();
+}
+
+function updateDataLabelsText(num,x){
+	dataDescriptionArray[num-1][0] = x;
+	askDataQuestions();
+}
+
+function updateDataColorsText(num,x){
+	dataDescriptionArray[num-1][1] = x;
+	askDataQuestions();
+}
+
+function updateDataPatternsText(num,x){
+	dataDescriptionArray[num-1][2] = x;
+	askDataQuestions();
+}
+
+function updateDataTrendsText(num,x){
+	dataDescriptionArray[num-1][3] = x;
+	askDataQuestions();
+}
+
+function updateDataTypesNumber(x){
+	
+	dataTypesNumber = x;
+
+
+ //  	switch(descriptionType){
+ //  		case 1:
+	// 		if(!barsClustered){
+	// 			updateNumberBarsClusters(x);
+	// 		}
+	// 		break;
+ //  		case 3:
+	// 	 //  	var count = 0;
+	// 		// for(var j = xMinNumber; j <= xMaxNumber; j +=xIncrementNumber){
+	// 		// 	count ++;
+	// 		// }
+	// 		// var numberOfRows = count;
+	// 		// var numberOfColumns = dataTypesNumber;
+	// 		// if (dataTableArray.length < numberOfColumns){
+	// 		// //dataDescriptionArray = new Array(dataTypesNumber);
+	// 		// 	for (var i = (dataTableArray.length); i < numberOfRows; i++) {
+	// 	 //  			dataTableArray[i] = undefined;
+	// 	 //  			//Label, color, pattern, trend
+	// 	 //  			//for(var c = 0; c < numberOfColumns; c++){
+	// 	 //  			//	dataLinesArray[c] = NaN;
+	// 	 //  			//}
+	// 	 //  		}
+	// 		// }
+	// 		// for(var k = 0; k<numberOfRows; k++){
+	// 		// 	if(typeof(dataTableArray[k])=="undefined"){
+	// 		// 		dataTableArray[k] = [];
+	// 		// 	}
+	// 		// 	if(dataTableArray[k].length<numberOfColumns){
+	// 		// 		for(var c=dataTableArray[k].length;c<numberOfColumns;c++){
+	// 		// 			dataTableArray[k][c] = undefined;
+					
+	// 		// 		}
+	// 		// 	}
+	// 		// }
+	// 		break;
+	// }
+
+  	askDataQuestions();
+}
+
+////////////////////
+// BARS FUNCTIONS //
+////////////////////
+
+function setBarsClustered(value){
+	barsClustered = value;
+	
+	var x = document.getElementById("barsNumberQuestionDiv");
+	var y = document.getElementById("barClustersNumberQuestionDiv");
+	if(barsClustered){
+		x.innerHTML = "How many types of bars are shown on the graph?";
+		y.style.display = "block";
+	} else {
+		x.innerHTML = "How many bars are shown on the graph?";
+		y.style.display = "none";
+		numberBarsClusters = dataTypesNumber;
+		updateDataTypesNumber(1);
+		// for(var k = 0;k<dataLabelExist.length;k++){
+		// 	dataLabelExist[k] = undefined;
+		// }
+	}
+	askDataQuestions();
+}
+
+function askBars(value){
+	var x = document.getElementById("askBarsDiv");
+	x.style.display = value ? "block" : "none";
+}
+
+function updateNumberBarsClusters(value){
+	numberBarsClusters = value;
+	askDataQuestions();
+}
+
+
+/////////////////////
+// LINES FUNCTIONS //
+/////////////////////
+
+function askLines(value){
+	var x = document.getElementById("askLinesDiv");
+	x.style.display = value ? "block" : "none";
+}
+
+////////////////////////////
+// GENERATE SUB-QUESTIONS //
+////////////////////////////
+
+function askDataQuestions(){
+	//Generate Text Questions for Lines HTML
+  	var generatedTextHTML = "";
+  	switch(descriptionType){
+  		case 1: //Horizontal bar chart
+  		case 2: //Vertical bar chart
+  			var textDivID = document.getElementById("generatedBarsDescriptionsDiv");
+	  		if(barsClustered){
+	  			var item = "bar type";
+		  		var itemC = "Bar type";
+	  		} else {
+	  			var item = "bar";
+		  		var itemC = "Bar";
+	  		}
+  		break;
+  		case 3: //Line Graph
+	  		var textDivID = document.getElementById("generatedLineDescriptionsDiv");
+	  		var item = "line";
+	  		var itemC = "Line";
+  		break;
+  		case 4: //Pie Chart
+  			var textDivID = document.getElementById("generatedWedgesDescriptionsDiv");
+  			var item = "wedge";
+  			var intemC = "Wedge";
+  			generatedTextHTML += "<br>Enter information about wedges below, from smallest to largest wedge.<br>";
+  			break;
+  		case 5: //Scatter Plot
+			var textDivID = document.getElementById("generatedPointsDescriptionsDiv");
+	  		var item = "point type";
+	  		var itemC = "Point type";
+  		break;
+  		case 6: //Venn diagram
+  			var textDivID = document.getElementById("generatedCirclesDescriptionsDiv");
+  			var item = "circle";
+  			var itemC = "Circle";
+  		break;
+  	}
+  	
+  	for (var i = 1; i <= dataTypesNumber; i++){
+  		//console.log("lines" + i)
+
+  		generatedTextHTML += "<div id=\"dataLabelExistDiv" + i + "\">";
+
+  			if(barsClustered || descriptionType > 2){
+
+
+				if(descriptionType==6 && i>circlesNumber){
+		  			item = "circle intersection";
+		  			itemC = "Circle intersection";
+
+				  	generatedTextHTML += "<br>" + "Is " + item + " " + (i - circlesNumber) + " labeled?";		
+		  		} else {
+		  			generatedTextHTML += "<br>" + "Is " + item + " " + i + " labeled?";
+		  		}
+
+
+		  		// if (typeof(dataLabelExist[i-1])==="undefined") {dataLabelExist[i-1] = true;}
+				if (typeof(dataDescriptionArray[i-1])==="undefined") {dataDescriptionArray[i-1] = ["","","","",""];}
+				// if(typeof(dataLabelExist[i-1])==="undefined"){dataLabelExist[i-1] = undefined}
+
+		  		if(dataLabelExist[i-1]==true){
+		  			generatedTextHTML +=
+		  			" <input type=\"radio\" name=\"dataTypeLabel" + i + "\" value=\"yes\" onclick=\"setDataLabelsExist(" + i + ",true)\" checked> Yes ";
+		  		} else {
+		  			generatedTextHTML +=
+		  			" <input type=\"radio\" name=\"dataTypeLabel" + i + "\" value=\"yes\" onclick=\"setDataLabelsExist(" + i + ",true)\"> Yes ";
+		  		}
+				if(dataLabelExist[i-1]==false){
+					generatedTextHTML +=
+					"<input type=\"radio\" name=\"dataTypeLabel" + i + "\" value=\"no\" onclick=\"setDataLabelsExist(" + i + ",false)\" checked> No";
+				} else {
+					generatedTextHTML +=
+					"<input type=\"radio\" name=\"dataTypeLabel" + i + "\" value=\"no\" onclick=\"setDataLabelsExist(" + i + ",false)\"> No";
+				}
+				
+				generatedTextHTML += "</div>";
+
+
+				
+		
+
+				if(dataLabelExist[i-1]){
+		  			generatedTextHTML +=
+		  				"<div id=\"dataPointsLabelDiv" + i + "\">";
+		  		} else {
+		  			generatedTextHTML +=
+		  				"<div id=\"dataPointsLabelDiv" + i + "\" style=\"display: none;\">";
+		  			}
+
+			  	generatedTextHTML += 
+					"What is the label? " +
+					"<input type=\"text\" onchange=\"updateDataLabelsText(" + i + ",this.value)\"" +
+					" value = \"" + dataDescriptionArray[i-1][0] +"\">" +
+					"</div>";
+				}
+		
+		
+		if(dataColorsExist){
+			generatedTextHTML += 
+			"<div id=\"dataPointsColorDiv" + i + "\">" +
+			"What is the color for " + item + " ";
+			if(descriptionType!=6 || i <= circlesNumber){
+				generatedTextHTML += i;
+			} else {
+				generatedTextHTML += (i - circlesNumber);
+			} 
+			generatedTextHTML += "? " + 
+			"<input type=\"text\" onchange=\"updateDataColorsText("+ i +",this.value)\"" +
+			" value = \"" + dataDescriptionArray[i-1][1] +"\">" + "</div>";
+		}
+
+		if(dataPatternsExist){
+			generatedTextHTML +=
+			"<div id=\"dataPointsPatternDiv" + i + "\">" +
+			"What is the pattern for " + item + " ";
+			if(descriptionType!=6 || i <= circlesNumber){
+				generatedTextHTML += i;
+			} else {
+				generatedTextHTML += i - circlesNumber;
+			} 
+			generatedTextHTML += "? " +
+			"<input type=\"text\" onchange=\"updateDataPatternsText(" + i + ",this.value)\"" +
+			" value = \"" + dataDescriptionArray[i-1][2] +"\">" + "</div>";
+		}
+
+		if(descriptionType==6 && i > circlesNumber){
+			generatedTextHTML += "<div id=\"circlesIntersectionsSelect" + (i-circlesNumber) + "\">What circles are included in intersection " + (i-circlesNumber) + "?<br>(Hold CTRL to select multiple.)<br>";
+
+			generatedTextHTML += "<select multiple width=\"200\" style=\"width: 200px\" onchange=\"updateCirclesIntersections(" + (i-circlesNumber) + ",this.options)\">";
+			for(var p=1;p<=circlesNumber;p++){
+				generatedTextHTML += "<option";
+				if (typeof circlesIntersectionsOptions[i-circlesNumber-1] !== 'undefined' && circlesIntersectionsOptions[i-circlesNumber-1].length > 0){
+					if(circlesIntersectionsOptions[i-circlesNumber-1][p-1]){
+						generatedTextHTML += " selected";
+					}
+				}
+
+				if(dataLabelExist[p-1]){
+					generatedTextHTML += " value=\"" + p + "\">" + dataDescriptionArray[p-1][0] + "</option>";
+				} else {
+	  				generatedTextHTML +=  " value=\"" + p +"\">Circle " + p + "</option>";
+	  			}
+	  		}
+			generatedTextHTML += "</select></div>";
+
+		}
+
+		if(descriptionType==5){
+			generatedTextHTML += "<div id=\"dataTypesNumberDiv" + i + "\">";
+			if(pointsNumberExact){
+				generatedTextHTML += "How";
+			} else {
+				generatedTextHTML += "Approximately how";
+			}
+			generatedTextHTML += " many points are there for point type " + i + "? " +
+			"<input type=\"number\" onchange=\" updateDataPointsOfTypeNumber(" + i + ",this.value)\"" +
+			" value = \"" + dataDescriptionArray[i-1][4] + "\">" + "</div>";
+		}
+
+		if(descriptionType==3 || descriptionType==5){
+			prefixText = itemC + " " + (i);
+			if(dataLabelExist[i-1]){
+				prefixText += " is labeled " +
+				dataDescriptionArray[i-1][0] + ",";
+			}
+			if (dataColorsExist) {
+				prefixText += " is colored " + dataDescriptionArray[i-1][1];
+			}
+			if (dataPatternsExist) {
+				prefixText += " has " + dataDescriptionArray[i-1][2] + " pattern";
+			}
+
+			if(dataLabelExist[i-1] || dataColorsExist || dataPatternsExist){
+				prefixText += " and";
+			}
+			prefixText += " has a trend of";
+
+			generatedTextHTML +=
+			"<div id=\"dataTrend" + i + "Div\">" +
+			"Briefly describe the appearance, shape, and/or direction of " + item + " " + i + ". " +
+			"Entered text will immediately follow the shown prefix.<br>" +
+			"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + prefixText + "<br>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+			"<textarea id=\"data" + i + "TrendText\" rows=\"3\" cols=\"52\" onchange=\"updateDataTrendsText("+ i + ",this.value)\">" + dataDescriptionArray[i-1][3] + "</textarea>" +
+			"</div>";
+		}
+
+  	}
+  	if(descriptionType != 0){
+	  	textDivID.innerHTML=generatedTextHTML;
+	  }
+  generateTable(true);
+}
+
+/////////////////////////////
+// GENERATE TABLE FUNCTION //
+/////////////////////////////
+
+function generateTable(questions){
+
+	//Generate Table Questions HTML
+  	
+  	if(questions){
+		var tableDivID = document.getElementById("generatedTableEntryDiv");
+		var generatedTableHTML = "<br>Fill in the empty table values below.<br>";
+	} else {
+		tableDivID = document.getElementById("outputTableDiv");
+		var generatedTableHTML = "";
+	}
+
+	switch(descriptionType){
+		case 1:
+		case 2:
+			if(descriptionType==1){
+				generatedTableHTML += "<table><tr>" + 
+				"<th>X-Axis Location</th>";
+				if(xLabelExist){
+					generatedTableHTML += "<th>" + yLabelText + "</th>";
+				} else {
+					generatedTableHTML += "<th>Y-Axis Label</th>";
+				}
+			} else {
+				generatedTableHTML += "<table><tr>" + 
+				"<th>Y-Axis Location</th>";
+				if(yLabelExist){
+					generatedTableHTML += "<th>" + xLabelText + "</th>"
+				} else {
+					generatedTableHTML += "<th>X-Axis Label</th>";
+				}
+				
+			}
+			
+			for(var i=1;i<=dataTypesNumber;i++){
+				generatedTableHTML += 
+					"<th>";
+				if(dataLabelExist[i-1]){
+					generatedTableHTML += dataDescriptionArray[i-1][0];
+				} else {
+					if(dataTypesNumber==1){
+						generatedTableHTML += "Bar Value";
+					} else {
+						generatedTableHTML += "Bar Type " + i + " Value";
+					}
+				}
+				if(descriptionType==1){ //horiontal bar chart
+					if(xUnitsExist){
+						generatedTableHTML += ", " + xUnitsText;
+					}
+				} else { //vertical bar chart
+					if(yUnitsExist){
+						generatedTableHTML += ", " + yUnitsText;
+					}
+				}
+
+				generatedTableHTML += "</th>";
+			}
+			generatedTableHTML += "</tr>";
+
+			for(var j=1;j<=numberBarsClusters;j++){
+				generatedTableHTML += "<tr><td>" + j + "</td>";
+
+				if(questions){
+
+					if(typeof(dataTableArray[j-1])==="undefined") dataTableArray[j-1]=[];
+
+					if(typeof(dataTableArray[j-1][0])==="undefined"){ 
+						generatedTableHTML +=
+						"<td><input type=\"text\" onchange=\"updateDataTable(" + j + "," + 1 + ",this.value)\"></td>";
+					} else {
+						generatedTableHTML +=
+						"<td><input type=\"text\" onchange=\"updateDataTable(" + j + "," + 1 + ",this.value)\" value =\"" + dataTableArray[j-1][0] + "\"></td>";
+					}
+				} else {
+					if(typeof(dataTableArray[j-1][0])==="undefined"){ 
+						generatedTableHTML += "<td></td>";
+					} else {
+						generatedTableHTML += "<td>" + dataTableArray[j-1][0] + "</td>";
+					}
+				}
+
+				for(var k=1;k<=dataTypesNumber;k++){
+					if(questions){
+						if(typeof(dataTableArray[j-1][k])==="undefined"){ 
+								generatedTableHTML +=
+									"<td><input type=\"number\" onchange=\"updateDataTable(" + j + "," + (k+1) + ",this.value)\"></td>";
+							} else {
+								generatedTableHTML +=
+									"<td><input type=\"number\" onchange=\"updateDataTable(" + j + "," + (k+1) + ",this.value)\" value =\"" + dataTableArray[j-1][k] + "\"></td>";
+							}
+					} else {
+						if(typeof(dataTableArray[j-1][k])==="undefined"){ 
+							generatedTableHTML += "<td></td>";
+						} else {
+							generatedTableHTML += "<td>" + dataTableArray[j-1][k] + "</td>";
+						}
+					}
+				}
+				generatedTableHTML += "</tr>";
+			}
+			generatedTableHTML += "</table>";
+			break;
+		case 3:
+	  	
+			//X-Value Headings
+			generatedTableHTML += "<table> <tr>" +
+				"<th>Data Point</th>" +
+				"<th>";
+			if(xLabelExist){
+				generatedTableHTML += xLabelText;
+			} else {
+				generatedTableHTML += "X-Value";
+			}
+			if(xUnitsExist){
+				generatedTableHTML += ", " + xUnitsText;
+			}
+			generatedTableHTML += "</th>";
+
+			//Y-Value Headings
+			for(var i = 1; i <= dataTypesNumber; i++){
+				generatedTableHTML += "<th>";
+				if(dataLabelExist[i-1]){
+					 	generatedTableHTML += dataDescriptionArray[i-1][0];
+					} else {
+						generatedTableHTML += "Line " + i;
+					}
+				if(yUnitsExist){
+					generatedTableHTML += ", " + yUnitsText;
+				}
+				generatedTableHTML += "</th>";
+			}
+			generatedTableHTML += "</tr>";
+
+			var count = 0;
+			for(var j = xMinNumber; j <= xMaxNumber; j +=xIncrementNumber){
+				count ++;
+
+				if(typeof(dataTableArray[count-1])==="undefined") dataTableArray[count-1]=[];
+				generatedTableHTML +=
+					"<tr>" +
+					"<td>" + count + "</td>" +
+					"<td>" + j + "</td>";
+				for(var i=1; i <= dataTypesNumber; i++){
+					if(questions){
+						if(typeof(dataTableArray[count-1][i-1])=="undefined"){
+							generatedTableHTML += "<td><input type=\"number\" onchange=\"updateDataTable(" + count + "," + i + ",this.value)\"></td>";
+						} else {
+							generatedTableHTML +=
+							"<td><input type=\"number\" onchange=\"updateDataTable(" + count + "," + i + ",this.value)\" value = " + dataTableArray[count-1][i-1] + "></td>";
+						}
+					} else {
+						if(typeof(dataTableArray[count-1][i-1])=="undefined"){
+							generatedTableHTML +=
+							"<td></td>";
+						} else {
+							generatedTableHTML +=
+							"<td>" + dataTableArray[count-1][i-1] + "</td>";
+						}
+
+					}
+				}
+				generatedTableHTML += "</tr>";
+			}
+			generatedTableHTML += "</table>";
+			break;
+		case 4:
+
+			generatedTableHTML += "<table><tr><th>Wedge</th>";
+			if(dataUnitsExist){
+				generatedTableHTML += "<th>" + dataUnitsText + "</th>";
+			}
+			if(dataPercentagesExist){
+				generatedTableHTML += "<th>Percentage</th>";
+			}
+			generatedTableHTML += "</tr>";
+
+			for(var i=1;i<=dataTypesNumber;i++){
+				if (!dataTableArray[i-1]) {dataTableArray[i-1] = [];}
+
+				generatedTableHTML += "<tr><td>";
+				if(dataLabelExist[i-1]){
+					generatedTableHTML += dataDescriptionArray[i-1][0];
+				} else {
+						generatedTableHTML += "Wedge " + i;
+				}
+				generatedTableHTML += "</td>";
+
+				if(dataUnitsExist){
+					if(questions){
+						generatedTableHTML += "<td><input type=\"number\" onchange=\"updateDataTable(" + i + "," + 1 + ",this.value)\" value =" + dataTableArray[i-1][0] + "></td>";
+					} else {
+						if(typeof(dataTableArray[i-1][0])==="undefined"){
+							generatedTableHTML += "<td></td>";
+						} else {
+							generatedTableHTML += "<td>" + dataTableArray[i-1][0] + "</td>";
+						}
+					}
+				}
+				if(dataPercentagesExist){
+					if(questions){
+						generatedTableHTML += "<td><input type=\"number\" onchange=\"updateDataTable(" + i + "," + 2 + ",this.value)\" value =" + dataTableArray[i-1][1] + "></td>";
+					} else {
+						if(typeof(dataTableArray[i-1][1])==="undefined"){
+							generatedTableHTML += "<td></td>";
+						} else {
+							generatedTableHTML += "<td>" + dataTableArray[i-1][1] + "</td>";
+						}
+					}
+				}
+				generatedTableHTML += "</tr>";
+			}
+
+			break;
+		case 5:
+				generatedTableHTML += "<table> <tr>" +
+					"<th> Point </th> <th> Type </th> <th>";
+
+				//Heading x-value
+				if(xLabelExist){
+					generatedTableHTML += xLabelText;
+				} else {
+					generatedTableHTML += "X-Value";
+				}
+				if(xUnitsExist){
+					generatedTableHTML += ", " + xUnitsText;
+				}
+				generatedTableHTML += "</th> <th>";
+				
+				//Heading y-value
+				if(yLabelExist){
+					generatedTableHTML += yLabelText;
+				} else {
+					generatedTableHTML += "Y-Value";
+				}
+				if(yUnitsExist){
+					generatedTableHTML += ", " + yUnitsText;
+				}
+				generatedTableHTML += "</th></tr>";
+
+				var count = 0;
+				for(var i=0;i<dataTypesNumber;i++){
+					for(var j=0;j<parseFloat(dataDescriptionArray[i][4]);j++){
+						count ++;
+						if(dataTableArray.length < count){
+							dataTableArray[count-1] = [undefined,undefined];
+						}
+
+						generatedTableHTML += "<tr>" +
+							"<td>" + count + "</td>";
+						if(dataLabelExist[i]){
+							generatedTableHTML +=
+							"<td>" + dataDescriptionArray[i][0] + "</td>";
+						} else {
+							generatedTableHTML += "<td> Point Type " + (i+1) + " </td>";
+						}
+
+						if(questions){
+							generatedTableHTML += "<td><input type=\"number\" id= \" dataPointsNumber" + count + "x\" onchange=\"updateDataTable(" + count + "," + 1 + ",this.value)\" value =" + dataTableArray[count-1][0] + "> </td>";
+							generatedTableHTML += "<td><input type=\"number\" id= \" dataPointsNumber" + count + "y\" onchange=\"updateDataTable(" + count + "," + 2 + ",this.value)\" value =" + dataTableArray[count-1][1] + "> </td> </tr>";
+						} else {
+							if(typeof(dataTableArray[count-1][0])=="undefined"){ 
+								generatedTableHTML += "<td></td>";
+							} else {
+								generatedTableHTML += "<td>" + dataTableArray[count-1][0] + "</td>";
+							}
+							if(typeof(dataTableArray[count-1][1])=="undefined"){
+								generatedTableHTML += "<td></td></tr>";
+							} else {
+								generatedTableHTML += "<td>" + dataTableArray[count-1][1] + "</td> </tr>";
+							}
+						}
+					}
+				}
+				generatedTableHTML += "</table>";
+
+			break;
+		case 6: //Venn Diagram
+			generatedTableHTML += "<table><tr>" +
+				"<th></th>";
+			if(dataUnitsExist){
+				generatedTableHTML += "<th>" + dataUnitsText + "</th>";
+			}
+			if(dataPercentagesExist){
+				generatedTableHTML += "<th>Percentage</th>";
+			}
+			generatedTableHTML += "</tr><tr>";
+
+			for(var i=1;i<=dataTypesNumber;i++){
+				if(i <= circlesNumber){
+					if(dataLabelExist[i-1]){
+						generatedTableHTML += "<td>" + dataDescriptionArray[i-1][0] + "</td>";
+					} else {
+						generatedTableHTML += "<td>Circle " + i + "</td>";
+					}
+				} else {
+					if(dataLabelExist[i-1]){
+						generatedTableHTML += "<td>" + dataDescriptionArray[i-1][0] + "</td>";
+					} else {
+						generatedTableHTML += "<td>Circle Intersection " + (i-circlesNumber) + "</td>";
+					}
+				}
+
+				if (typeof(dataTableArray[i-1])==="undefined") {dataTableArray[i-1] = [undefined,undefined];}
+
+				if(dataUnitsExist){
+					if(questions){
+						if(typeof(dataTableArray[i-1][0])=="undefined"){ 
+							generatedTableHTML +=
+							"<td><input type=\"number\" onchange=\"updateDataTable(" + i + "," + 1 + ",this.value)\"></td>";
+						} else {
+							generatedTableHTML +=
+							"<td><input type=\"number\" onchange=\"updateDataTable(" + i + "," + 1 + ",this.value)\" value =" + dataTableArray[i-1][0] + "></td>";
+						}
+					} else {
+						if(typeof(dataTableArray[i-1][0])=="undefined"){ 
+							generatedTableHTML +=
+							"<td></td>";
+						} else {
+							generatedTableHTML +=
+							"<td>" + dataTableArray[i-1][0] + "</td>";
+						}
+					}
+				}
+
+				if(dataPercentagesExist){
+					if(questions){
+						if(typeof(dataTableArray[i-1][1])=="undefined"){ 
+							generatedTableHTML +=
+							"<td><input type=\"number\" onchange=\"updateDataTable(" + i + "," + 2 + ",this.value)\"></td>";
+						} else {
+							generatedTableHTML +=
+							"<td><input type=\"number\" onchange=\"updateDataTable(" + i + "," + 2 + ",this.value)\" value =" + dataTableArray[i-1][1] + "></td>";
+						}
+					} else {
+						if(typeof(dataTableArray[i-1][1])=="undefined"){ 
+							generatedTableHTML += "<td></td>";
+						} else {
+							generatedTableHTML +=
+							"<td>" + dataTableArray[i-1][1] + "</td>";
+						}
+					}
+				}
+				generatedTableHTML +="</tr>";
+
+			}
+			generatedTableHTML += "</table>"
+
+		break;
+	}
+
+	generatedTableHTML += "<br>";
+	tableDivID.innerHTML=generatedTableHTML;
+	
+}
+
+
+
+//////////////////////
+// POINTS FUNCTIONS //
+//////////////////////
+function askPoints(value){
+	var x = document.getElementById("askPointsDiv");
+	x.style.display = value ? "block" : "none";
+
+}
+
+function setPointsNumberExact(value){
+	pointsNumberExact = value;
+	askTable(value);
+	tableExist = value;
+	askDataQuestions();
+}
+
+function updateDataPointsOfTypeNumber(row,value){
+	dataDescriptionArray[row-1][4] = value;
+	tableRecDivID = document.getElementById("tableRecommendationDiv");
+	
+	sum = 0;
+	for(var i=0;i<dataTypesNumber;i++){
+		if(dataDescriptionArray[i][4] > 10){
+			sum ++;
+		}
+	}
+	if(sum > 0){
+		tableRecDivID.innerHTML = "A data table is only recommended if there are 10 or fewer points per point type.<br>A table is not recommended for this scatter plot.<br>";
+	} else {
+		tableRecDivID.innerHTML = "A data table is only recommended if there are 10 or fewer points per point type.<br>A table would be acceptable for this scatter plot.<br>";
+	}
+
+	askDataQuestions();
+}
+
+//////////////////////
+// WEDGES FUNCTIONS //
+//////////////////////
+
+function askWedges(value){
+	var x = document.getElementById("askWedgesDiv");
+	x.style.display = value ? "block" : "none";
+
+}
+
+///////////////////////
+// CIRCLES FUNCTIONS //
+///////////////////////
+function askCircles(value){
+	var x = document.getElementById("askCirclesDiv");
+	x.style.display = value ? "block" : "none";
+}
+
+function setDataUnits(value){
+	switch(descriptionType){
+		case 4: //Pie Chart
+			var x = document.getElementById("wedgesUnitsTextDiv");
+			x.style.display = value ? "block" : "none";
+			break;
+		case 6: //Venn diagram
+			var x = document.getElementById("circlesUnitsTextDiv");
+			x.style.display = value ? "block" : "none";
+			break;
+	}
+	
+	dataUnitsExist = value;
+	askDataQuestions();
+}
+
+function updateDataUnitsText(value){
+	dataUnitsText = value;
+	askDataQuestions();
+}
+
+function setDataPercentages(value){
+	dataPercentagesExist = value;
+	askDataQuestions();
+}
+
+function updateDataTable(row,column,value){
+	dataTableArray[row-1][column-1] = value;
+	askDataQuestions();
+}
+
+
+function updateCirclesIntersections(index,value){
+	circlesIntersectionsNames[index-1] = [];
+	circlesIntersectionsOptions[index-1] = [];
+	for(var i = 0;i<value.length;i++){
+		if(value[i].selected){
+			circlesIntersectionsNames[index-1].push(value[i].innerHTML);
+			circlesIntersectionsOptions[index-1][i] = true;
+		} else {
+			circlesIntersectionsOptions[index-1][i] = false;
+		}
+	}
+	askDataQuestions();
+}
+
+function updateCirclesNumber(x){
+	circlesNumber = parseFloat(x);
+	updateDataTypesNumber(parseFloat(circlesNumber) + parseFloat(circlesIntersectionsNumber));
+	askDataQuestions();
+}
+
+function updateCirclesIntersectionsNumber(x){
+	circlesIntersectionsNumber = x;
+	updateDataTypesNumber(parseFloat(circlesNumber) + parseFloat(circlesIntersectionsNumber));
+	askDataQuestions();
+}
+
+/////////////////////
+// TREND FUNCTIONS //
+/////////////////////
+
+function setTrend(value){
+		var x = document.getElementById("trendTextDiv");
+		x.style.display = value ? "block" : "none";
+		trendExist = value;
+		askDataQuestions();
+}
+
+function updateTrendText(x){
+	trendText = x;
+	askDataQuestions();
+}
+
+function askOverallTrends(value){
+	var x = document.getElementById("askOverallTrendsDiv");
+	x.style.display = value ? "block" : "none";
+}
+
+
+
+//-->
+</script>
+</head>
+
+<body>
+<div class="shell">
+  <div class="border">
+  <div id="header">
+      <h1 id="logo"><a href="index.html" class="notext">Valerie Morash</a></h1>
+      <div class="cl">&nbsp;</div>
+    </div>
+		<ul id="navbar">
+        <li><a href="index.html">ABOUT</a></li>
+        <li><a href="research.html">RESEARCH</a></li>
+        <li><a href="publications.html">PUBLICATIONS</a></li>
+        <li><a class="active">RESEARCH MATERIALS</a><ul>
+          <li><a href="stimuli.html">Perceptual Stimuli</a></li><br>
+          <li><a href="code.html">Code & Statistics</a></li><br>
+          <li><a href="machines.html">Machines</a></li><br>
+          <li><a href="surveys.html">Surveys</a></li><br>
+          <li><a href="assessment.html">Assessments & Archive</a></li><br>
+          <li><a href="imageDescription.html">Image Description</a></li></ul>
+        <li><a href="participate.html">GET INVOLVED</a></li>
+          </li>
+      <div class="cl">&nbsp;</div>
+    </ul>
+<div id="main">
+<form>
+
+<h2>Background</h2>
+<p>Use this website to create textual image descriptions (alt texts) that can be added to web pages, PDF documents, Word documents, etc., to make STEM figures accessible to people using a screen reader.</p><br>
+<h2>Select Image Type</h2>
+<div style="display: inline-flex;">
+	<div id="imageTypePieChartDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(4)">
+        <img src="images/pieChart.png" onclick="setDescriptionType(4)" alt="Pie Chart"> <br>
+        <input type="radio" name="type" value="pieChart" onclick="setDescriptionType(4)" style="display:none"> Pie Chart
+    </div>
+
+    <div id="imageTypeHorizontalBarChartDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(1)">
+        <img src="images/horizontalBarChart.png" onclick="setDescriptionType(1)" alt="Horizontal Bar Chart (Lines Oriented Left-Right)"> <br>
+        <input type="radio" name="type" value="horizontalBarChart" onclick="setDescriptionType(1)" style="display:none"> Horizontal<br>Bar Chart
+    </div>
+
+    <div id="imageTypeVerticalBarChartDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(2)">
+        <img src="images/verticalBarChart.png" onclick="setDescriptionType(2)" alt="Vertical Bar Chart (Lines Oriented Up-Down)"> <br>
+        <input type="radio" name="type" value="verticalBarChart" onclick="setDescriptionType(2)" style="display:none"> Vertical<br>Bar Chart
+    </div>
+
+    <div id="imageTypeLineGraphDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(3)">
+        <img src="images/lineGraph.png" onclick="setDescriptionType(3)" alt="Line Graph with One or More Line Types"> <br>
+        <input type="radio" name="type" value="lineGraph" onclick="setDescriptionType(3)" style="display:none"> Line Graph
+    </div>
+
+    <div id="imageTypeVennDiagramDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(6)">
+        <img src="images/vennDiagram.png" onclick="setDescriptionType(6)" alt="Venn Diagram"> <br>
+        <input type="radio" name="type" value="vennDiagram" onclick="setDescriptionType(6)" style="display:none"> Venn Diagram
+    </div>
+    <div id="imageTypeScatterPlotDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(5)">
+        <img src="images/scatterPlot.png" onclick="setDescriptionType(5)" alt="Scatter Plot with One or More Point Types"> <br>
+        <input type="radio" name="type" value="scatterPlot" onclick="setDescriptionType(5)" style="display:none"> Scatter Plot
+    </div>
+    </span>
+</div>
+<br><br>
+
+<h2>Enter Image Information</h2>
+<!-- Title -->
+<div>
+Does the image have a title?
+<input type="radio" name="title" value="yes" onclick="setTitle(true)"> Yes 
+<input type="radio" name="title" value="no" onclick="setTitle(false)"> No
+</div>
+
+<div id="titleTextDiv" style="display:none">
+What is the title? <br>
+<textarea id="titleText" rows="3" cols="52" oninput="updateTitleText(this.value)" onchange="updateTitleText(this.value)"></textarea>
+</div>
+
+<!-- Caption -->
+<br>
+<div>
+Does the image have a caption?
+<input type="radio" name="caption" value="yes" onclick="setCaption(true)"> Yes 
+<input type="radio" name="caption" value="no" onclick="setCaption(false)"> No
+</div>
+
+<div id="captionTextDiv" style="display:none">
+What is the caption? <br>
+<textarea id="captionText" rows="3" cols="52" oninput="updateCaptionText(this.value)" onchange="updateCaptionText(this.value)"></textarea>
+<br>
+</div>
+
+<!-- X -->
+<div id="askXLabelDiv"> <!-- Ask X Label -->
+<br>
+<div id="xLabelDiv">
+Is the horizontal x-axis labeled?
+<input type="radio" name="xAxisLabel" value="yes" onclick="setXLabel(true)"> Yes 
+<input type="radio" name="xAxisLabel" value="no" onclick="setXLabel(false)"> No
+</div>
+<div id="xLabelTextDiv" style="display:none">
+What is the horizontal x-axis label? <input type="text" id="xLabelText" oninput="updateXLabelText(this.value)" onchange="updateXLabelText(this.value)">
+</div>
+</div>
+
+<div id="askXUnitsDiv"> <!-- Ask X Units -->
+<br>
+<div id="xUnitsDiv">
+Does the horizontal x-axis have units?
+<input type="radio" name="xUnits" value="yes" onclick="setXUnits(true)"> Yes 
+<input type="radio" name="xUnits" value="no" onclick="setXUnits(false)"> No
+</div>
+<div id="xUnitsTextDiv" style="display:none">
+What are the horizontal x-axis units? <input type="text" id="xUnitsText" oninput="updateXUnitsText(this.value)" onchange="updateXUnitsText(this.value)">
+</div>
+</div>
+
+<div id="askXValuesDiv"> <!-- Ask X Values -->
+For the horizontal x-axis, what is the
+<div id="xMinDiv">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Minimum:
+<input type="number" name="xMin" onchange="updateXMinNumber(this.value)">
+</div>
+<div id="xMaxDiv">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Maximum:
+<input type="number" name="xMax" onchange="updateXMaxNumber(this.value)">
+</div>
+<div id="xIncrementsDiv">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Increment value:
+<input type="number" name="xIncrement" onchange="updateXIncrementNumber(this.value)">
+</div>
+</div>
+
+<!-- Y -->
+<div id="askYLabelDiv"> <!-- Ask Y Label -->
+<br>
+<div id="yLabelDiv">
+Is the vertical y-axis labeled?
+<input type="radio" name="yAxisLabel" value="yes" onclick="setYLabel(true)"> Yes 
+<input type="radio" name="yAxisLabel" value="no" onclick="setYLabel(false)"> No
+</div>
+<div id="yLabelTextDiv" style="display:none">
+What is the vertical y-axis label? <input type="text" id="yLabelText" oninput="updateYLabelText(this.value)" onchange="updateYLabelText(this.value)">
+</div>
+</div>
+
+<div id="askYUnitsDiv"> <!-- Ask Y Units -->
+<div id="yUnitsDiv">
+<br>
+Does the vertical y-axis have units?
+<input type="radio" name="yUnits" value="yes" onclick="setYUnits(true)"> Yes 
+<input type="radio" name="yUnits" value="no" onclick="setYUnits(false)"> No
+</div>
+<div id="yUnitsTextDiv" style="display:none">
+What are the vertical y-axis units? <input type="text" id="yUnitsText" oninput="updateYUnitsText(this.value)" onchange="updateYUnitsText(this.value)">
+</div>
+</div>
+
+<div id="askYValuesDiv"> <!-- Ask Y Values -->
+For the vertical y-axis, what is the
+<div id="yMinDiv">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Minimum:
+<input type="number" name="yMin" onchange="updateYMinNumber(this.value)">
+</div>
+<div id="yMaxDiv">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Maximum:
+<input type="number" name="yMax" onchange="updateYMaxNumber(this.value)">
+</div>
+<div id="yIncrementsDiv">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Increment value:
+<input type="number" name="yIncrement" onchange="updateYIncrementNumber(this.value)">
+</div>
+</div>
+
+<!-- Bars -->
+<div id="askBarsDiv">
+<br>
+<div id="barsClusteredDiv">
+Are the data represented as single bars or clusters of bars?
+<input type="radio" name="barCluster" value="yes" onclick="setBarsClustered(false)"> Single Bars 
+<input type="radio" name="barCluster" value="no" onclick="setBarsClustered(true)"> Clusters of Bars
+</div>
+<div id="barClustersNumberQuestionDiv">
+How many clusters of bars are shown on the graph?
+<input type="number" name="barClustersNumber" min="1" onchange="updateNumberBarsClusters(this.value)">
+</div>
+<span id="barsNumberQuestionDiv">
+How many bars are shown on the graph?
+</span>
+<span id="barsNumberDiv">
+<input type="number" name="barNumber" min="1" onchange="updateDataTypesNumber(this.value)">
+</span>
+<div id="barsColorsDiv">
+Do the bars have different colors?
+<input type="radio" name="barsColors" value="yes" onclick="setDataColors(true)"> Yes
+<input type="radio" name="barsColors" value="no" onclick="setDataColors(false)"> No
+</div>
+<div id="barsPatternsDiv">
+Do the bars have different patterns?
+<input type="radio" name="barsPatterns" value="yes" onclick="setDataPatterns(true)"> Yes
+<input type="radio" name="barsPatterns" value="no" onclick="setDataPatterns(false)"> No
+</div>
+<div id="generatedBarsDescriptionsDiv">
+</div>
+</div>
+
+<!-- Lines -->
+<div id="askLinesDiv">
+<br>
+<div id="linesNumberDiv">
+How many lines are shown on the graph?
+<input type="number" name="linesNumber" min="1" onchange="updateDataTypesNumber(this.value)">
+</div>
+<div id="linesColorsDiv">
+Do the lines have different colors?
+<input type="radio" name="linesColors" value="yes" onclick="setDataColors(true)"> Yes
+<input type="radio" name="linesColors" value="no" onclick="setDataColors(false)"> No
+</div>
+<div id="linesPatternsDiv">
+Do the lines have different patterns?
+<input type="radio" name="linesPatterns" value="yes" onclick="setDataPatterns(true)"> Yes
+<input type="radio" name="linesPatterns" value="no" onclick="setDataPatterns(false)"> No
+</div>
+<div id="generatedLineDescriptionsDiv">
+</div>
+</div>
+
+<!-- Points -->
+<div id="askPointsDiv">
+<br>
+<div id="pointsNumberDiv">
+How many types of points are shown on the graph?
+<input type="number" name="pointsNumber" min="1" onchange="updateDataTypesNumber(this.value)">
+</div>
+<div id="pointsColorsDiv">
+Do the point types have different colors?
+<input type="radio" name="pointsColors" value="yes" onclick="setDataColors(true)"> Yes
+<input type="radio" name="pointsColors" value="no" onclick="setDataColors(false)"> No
+</div>
+<div id="pointsPatternsDiv">
+Do the point types have different patterns?
+<input type="radio" name="pointsPatterns" value="yes" onclick="setDataPatterns(true)"> Yes
+<input type="radio" name="pointsPatterns" value="no" onclick="setDataPatterns(false)"> No
+</div>
+<div id="pointsNumberExactDiv">
+<br>Can the number of points be counted exactly in a short amount of time?
+<input type="radio" name="pointsNumberExactQ" value="yes" onclick="setPointsNumberExact(true)"> Yes
+<input type="radio" name="pointsNumberExactQ" value="no" onclick="setPointsNumberExact(false)"> No
+</div>
+<div id="generatedPointsDescriptionsDiv">
+</div>
+</div>
+
+<!-- Wedges -->
+<div id="askWedgesDiv">
+<br>
+<div id="wedgesNumberDiv">
+How many wedges are shown on the chart?
+<input type="number" name="wedgesNumber" min="1" onchange="updateDataTypesNumber(this.value)">
+</div><br>
+<div id="wedgesPercentagesDiv">
+Are wedges displayed with percentages?
+<input type="radio" name="wedgesPercentages" value="yes" onclick="setDataPercentages(true)"> Yes 
+<input type="radio" name="wedgesPercentages" value="no" onclick="setDataPercentages(false)"> No
+</div>
+<div id="wedgesUnitsDiv">
+Are wedges displayed with non-percentage units?
+<input type="radio" name="wedgesUnits" value="yes" onclick="setDataUnits(true)"> Yes 
+<input type="radio" name="wedgesUnits" value="no" onclick="setDataUnits(false)"> No
+</div>
+<div id="wedgesUnitsTextDiv" style="display:none">
+What are the wedges' units?
+<input type="text" id="wedgesUnitsText" oninput="updateDataUnitsText(this.value)" onchange="updateDataUnitsText(this.value)">
+</div><br>
+<div id="wedgesColorsDiv">
+Do the wedges have different colors?
+<input type="radio" name="wedgesColors" value="yes" onclick="setDataColors(true)"> Yes
+<input type="radio" name="wedgesColors" value="no" onclick="setDataColors(false)"> No
+</div>
+<div id="wedgesPatternsDiv">
+Do the wedges have different patterns?
+<input type="radio" name="wedgesPatterns" value="yes" onclick="setDataPatterns(true)"> Yes
+<input type="radio" name="wedgesPatterns" value="no" onclick="setDataPatterns(false)"> No
+</div>
+<div id="generatedWedgesDescriptionsDiv">
+</div>
+</div>
+
+<!-- Circles -->
+<div id="askCirclesDiv">
+<br>
+<div id="circlesNumberDiv">
+How many circles are shown on the chart?
+<input type="number" name="circlesNumber" min="1" onchange="updateCirclesNumber(this.value)">
+</div>
+<div id="circlesIntersectionsNumberDiv">
+How many circle intersections are shown on the chart?
+<input type="number" name="circlesIntersectionsNumber" min="1" onchange="updateCirclesIntersectionsNumber(this.value)">
+</div><br>
+<div id="circlesPercentagesDiv">
+Are circles displayed with percentages?
+<input type="radio" name="circlesPercentages" value="yes" onclick="setDataPercentages(true)"> Yes 
+<input type="radio" name="circlesPercentages" value="no" onclick="setDataPercentages(false)"> No
+</div>
+<div id="circlesUnitsDiv">
+Are circles displayed with non-percentage units?
+<input type="radio" name="circlesUnits" value="yes" onclick="setDataUnits(true)"> Yes 
+<input type="radio" name="circlesUnits" value="no" onclick="setDataUnits(false)"> No
+</div>
+<div id="circlesUnitsTextDiv" style="display:none">
+What are the circles' units?
+<input type="text" id="circlesUnitsText" oninput="updateDataUnitsText(this.value)" onchange="updateDataUnitsText(this.value)">
+</div><br>
+<div id="circlesColorsDiv">
+Do the circles and/or intersections have different colors?
+<input type="radio" name="circlesColors" value="yes" onclick="setDataColors(true)"> Yes
+<input type="radio" name="circlesColors" value="no" onclick="setDataColors(false)"> No
+</div>
+<div id="circlesPatternsDiv">
+Do the circles and/or intersections have different patterns?
+<input type="radio" name="circlesPatterns" value="yes" onclick="setDataPatterns(true)"> Yes
+<input type="radio" name="circlesPatterns" value="no" onclick="setDataPatterns(false)"> No
+</div>
+<div id="generatedCirclesDescriptionsDiv">
+</div>
+</div>
+
+<!-- Trend -->
+<div id="askOverallTrendsDiv">
+<div id="trendDiv">
+<br>
+Are there any obvious or notable data trends?
+<input type="radio" name="trend" value="yes" onclick="setTrend(true)"> Yes 
+<input type="radio" name="trend" value="no" onclick="setTrend(false)"> No
+</div>
+<div id="trendTextDiv">
+Please write a general description of any obvious data trends. <br>
+(In complete sentences.)<br>
+<textarea id="trendText" rows="3" cols="52" oninput="updateTrendText(this.value)" onchange="updateTrendText(this.value)"></textarea>
+</div>
+</div>
+
+<!-- Table -->
+<div id="askTableDiv">
+<br>
+<div id="tableRecommendationDiv">
+</div>
+Do you want to create a data table?
+<input type="radio" name="tableQ" value="yes" onclick="setTable(true)"> Yes
+<input type="radio" name="tableQ" value="no" onclick="setTable(false)"> No
+<div id="generatedTableEntryDiv">
+</div>
+</div>
+
+<br>
+
+<h2>Image Description Output</h2>
+<div id="generateDescriptionButtonDiv">
+<button type="button" onclick="updateDescription()" style="padding: 5px 10px;"> Click to Generate or Update Description </button>
+</div>
+<br>
+<div id="outputTextDiv" style="display:none;">
+</div>
+<div id="outputTableDiv" style="display:none;">
+</div>
+
+<br>
+<h2>Postscript</h2>
+<p>Text descriptions should be edited for correct syntax following their creation.</p>
+<br>
+<p>This tool was based on the research published in:<br>
+Morash, V., Siu, Y. -T., Miele, J.A., Hasty, L., & Landau, S. (2015). Guiding novice web workers in making image descriptions using templates. <i>ACM Transactions on Accessible Computing</i>, accepted.
+</p><br>
+<p>To report bugs or provide suggestions, please contact me at <a href="mailto:val@ski.org">val@ski.org</a></p>
+</form>
+<div class="cl">&nbsp;</div>
+    </div>
+<div class="shadow-l"></div>
+    <div class="shadow-r"></div>
+    <div class="shadow-b"></div>
+<script type="text/javascript">
+<!--
+setTitle(titleExist);
+setCaption(captionExist);
+
+setXLabel(xLabelExist);
+setXUnits(xUnitsExist);
+setYLabel(yLabelExist);
+setYUnits(yUnitsExist);
+
+setDataColors(dataColorsExist);
+setDataPatterns(dataPatternsExist);
+
+setDataUnits(dataUnitsExist);
+
+setPointsNumberExact(pointsNumberExact);
+
+setTrend(trendExist);
+setTable(tableExist);
+
+askXLabel(false);
+askXUnits(false);
+askXValues(false);
+askYLabel(false);
+askYUnits(false);
+askYValues(false);
+askOverallTrends(false);
+askBars(false);
+askLines(false);
+askPoints(false);
+askWedges(false);
+askCircles(false);
+askTable(tableExist);
+
+
+//-->
+</script>
+</body>
+</html>

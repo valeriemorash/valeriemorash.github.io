@@ -364,13 +364,33 @@ function generateText(){
 			}
 		} else {
 			text += " " + itemC + " " + (i+1);
+
 			if(dataLabelExist[i]){
 				text += " is labeled " + dataDescriptionArray[i][0];
-				if(dataColorsExist || dataPatternsExist || dataTrendExist){
+				if(dataColorsExist || dataPatternsExist || dataTrendExist || pointsExist){
 					text += ",";
 				} else {
 					text += ".";
 				}
+			}
+		}
+
+		if(descriptionType == 5){
+			var pointsExist = true;
+		} else {
+			var pointsExist = false;
+		}
+
+		if(pointsExist){
+			if(pointsNumberExact){
+				text += " has " + dataDescriptionArray[i][4] + " points";
+			} else {
+				text += " has approximately " + dataDescriptionArray[i][4] + " points";
+			}
+			if(dataColorsExist || dataPatternsExist || dataTrendExist){
+				text += ",";
+			} else {
+				text += ".";
 			}
 		}
 
@@ -1001,7 +1021,7 @@ function askDataQuestions(){
 			generatedTextHTML +=
 			"<div id=\"dataTrend" + i + "Div\">" +
 			"Briefly describe the appearance, shape, and/or direction of " + item + " " + i + ". " +
-			"Entered text will immediately follow the shown prefix.<br>" +
+			"Entered text will immediately follow the shown prefix (include final period).<br>" +
 			"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + prefixText + "<br>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
 			"<textarea id=\"data" + i + "TrendText\" rows=\"3\" cols=\"52\" onchange=\"updateDataTrendsText("+ i + ",this.value)\">" + dataDescriptionArray[i-1][3] + "</textarea>" +
 			"</div>";

@@ -63,6 +63,7 @@ var circlesNumber;
 var circlesIntersectionsNumber;
 var circlesIntersectionsNames;
 var circlesIntersectionsOptions;
+var circlesTextsExist;
 
 
 //////////////////////////////////////////////////////////////
@@ -130,6 +131,7 @@ function initializeVariables(){
 	dataUnitsExist = false;
 	dataUnitsText = "";
 	dataPercentagesExist = false;
+	circlesTextsExist = false;
 
 	dataDescriptionArray = [["","","","",""]];
 	//Label, color, pattern, trend, quantity
@@ -535,7 +537,7 @@ function setDescriptionType(value){
 				break;
 			case 4: //Pie Chart (wedges)
 				askWedges(true);
-				tableRecDivID.innerHTML = "A data table is always recommended for pie charts.";
+				tableRecDivID.innerHTML = "A data table is always recommended for pie charts that have wedges labeled with units or percentages.";
 				break;
 			case 5:
 				askXLabel(true);
@@ -549,7 +551,7 @@ function setDescriptionType(value){
 				break;
 			case 6:
 				askCircles(true);
-				tableRecDivID.innerHTML = "A data table is always recommended for Venn diagrams.";
+				tableRecDivID.innerHTML = "A data table is always recommended for Venn diagrams that have areas labeled with units, percentages, or text.";
 				break;
 		}
 		askDataQuestions();
@@ -765,47 +767,7 @@ function updateDataTrendsText(num,x){
 }
 
 function updateDataTypesNumber(x){
-	
 	dataTypesNumber = x;
-
-
- //  	switch(descriptionType){
- //  		case 1:
-	// 		if(!barsClustered){
-	// 			updateNumberBarsClusters(x);
-	// 		}
-	// 		break;
- //  		case 3:
-	// 	 //  	var count = 0;
-	// 		// for(var j = xMinNumber; j <= xMaxNumber; j +=xIncrementNumber){
-	// 		// 	count ++;
-	// 		// }
-	// 		// var numberOfRows = count;
-	// 		// var numberOfColumns = dataTypesNumber;
-	// 		// if (dataTableArray.length < numberOfColumns){
-	// 		// //dataDescriptionArray = new Array(dataTypesNumber);
-	// 		// 	for (var i = (dataTableArray.length); i < numberOfRows; i++) {
-	// 	 //  			dataTableArray[i] = undefined;
-	// 	 //  			//Label, color, pattern, trend
-	// 	 //  			//for(var c = 0; c < numberOfColumns; c++){
-	// 	 //  			//	dataLinesArray[c] = NaN;
-	// 	 //  			//}
-	// 	 //  		}
-	// 		// }
-	// 		// for(var k = 0; k<numberOfRows; k++){
-	// 		// 	if(typeof(dataTableArray[k])=="undefined"){
-	// 		// 		dataTableArray[k] = [];
-	// 		// 	}
-	// 		// 	if(dataTableArray[k].length<numberOfColumns){
-	// 		// 		for(var c=dataTableArray[k].length;c<numberOfColumns;c++){
-	// 		// 			dataTableArray[k][c] = undefined;
-					
-	// 		// 		}
-	// 		// 	}
-	// 		// }
-	// 		break;
-	// }
-
   	askDataQuestions();
 }
 
@@ -826,9 +788,6 @@ function setBarsClustered(value){
 		y.style.display = "none";
 		numberBarsClusters = dataTypesNumber;
 		updateDataTypesNumber(1);
-		// for(var k = 0;k<dataLabelExist.length;k++){
-		// 	dataLabelExist[k] = undefined;
-		// }
 	}
 	askDataQuestions();
 }
@@ -1157,7 +1116,7 @@ function generateTable(questions){
 			}
 			generatedTableHTML += "</table>";
 			break;
-		case 3:
+		case 3: //Line graph
 	  	
 			//X-Value Headings
 			generatedTableHTML += "<table> <tr>" +
@@ -1220,7 +1179,7 @@ function generateTable(questions){
 			}
 			generatedTableHTML += "</table>";
 			break;
-		case 4:
+		case 4: //PIE CHART
 
 			generatedTableHTML += "<table><tr><th>Wedge</th>";
 			if(dataUnitsExist){
@@ -1268,7 +1227,7 @@ function generateTable(questions){
 			}
 
 			break;
-		case 5:
+		case 5: //Scatter plot
 				generatedTableHTML += "<table> <tr>" +
 					"<th> Point </th> <th> Type </th> <th>";
 
@@ -1340,6 +1299,9 @@ function generateTable(questions){
 			if(dataPercentagesExist){
 				generatedTableHTML += "<th>Percentage</th>";
 			}
+			if(circlesTextsExist){
+				generatedTableHTML += "<th>Text</th>";
+			}
 			generatedTableHTML += "</tr><tr>";
 
 			for(var i=1;i<=dataTypesNumber;i++){
@@ -1397,6 +1359,26 @@ function generateTable(questions){
 						}
 					}
 				}
+
+				if(circlesTextsExist){
+					if(questions){
+						if(typeof(dataTableArray[i-1][2])=="undefined"){ 
+							generatedTableHTML +=
+							"<td><input type=\"text\" onchange=\"updateDataTable(" + i + "," + 3 + ",this.value)\"></td>";
+						} else {
+							generatedTableHTML +=
+							"<td><input type=\"text\" onchange=\"updateDataTable(" + i + "," + 3 + ",this.value)\" value =\"" + dataTableArray[i-1][2] + "\"></td>";
+						}
+					} else {
+						if(typeof(dataTableArray[i-1][2])=="undefined"){ 
+							generatedTableHTML += "<td></td>";
+						} else {
+							generatedTableHTML +=
+							"<td>" + dataTableArray[i-1][2] + "</td>";
+						}
+					}
+				}
+
 				generatedTableHTML +="</tr>";
 
 			}
@@ -1468,18 +1450,31 @@ function askCircles(value){
 }
 
 function setDataUnits(value){
+
+	dataUnitsExist = value;
+
 	switch(descriptionType){
 		case 4: //Pie Chart
 			var x = document.getElementById("wedgesUnitsTextDiv");
 			x.style.display = value ? "block" : "none";
+			if(!dataUnitsExist && !dataPercentagesExist){
+				setTable(false);
+			} else {
+				setTable(true);
+			}
 			break;
 		case 6: //Venn diagram
 			var x = document.getElementById("circlesUnitsTextDiv");
 			x.style.display = value ? "block" : "none";
+
+			if(!circlesTextsExist && !dataUnitsExist && !dataPercentagesExist){
+				setTable(false);
+			} else {
+				setTable(true);
+			}
 			break;
 	}
 	
-	dataUnitsExist = value;
 	askDataQuestions();
 }
 
@@ -1490,11 +1485,38 @@ function updateDataUnitsText(value){
 
 function setDataPercentages(value){
 	dataPercentagesExist = value;
+	switch(descriptionType){
+		case 4: //Pie chart
+			if(!dataUnitsExist && !dataPercentagesExist){
+				setTable(false);
+			} else {
+				setTable(true);
+			}
+			break;
+		case 6: //Venn diagram
+			if(!circlesTextsExist && !dataUnitsExist && !dataPercentagesExist){
+				setTable(false);
+			} else {
+				setTable(true);
+			}
+			break;
+	}
 	askDataQuestions();
 }
 
 function updateDataTable(row,column,value){
 	dataTableArray[row-1][column-1] = value;
+	askDataQuestions();
+}
+
+function setCirclesText(value){
+	circlesTextsExist = value;
+	if(!circlesTextsExist && !dataUnitsExist && !dataPercentagesExist){
+		setTable(false);
+	} else {
+		setTable(true);
+	}
+
 	askDataQuestions();
 }
 
@@ -1580,6 +1602,7 @@ function askOverallTrends(value){
 <h2>Background</h2>
 <p>Use this website to create textual image descriptions (alt texts) that can be added to web pages, PDF documents, Word documents, etc., to make STEM figures accessible to people using a screen reader.</p><br>
 <h2>Select Image Type</h2>
+<div style="width: 100%; text-align: center;">
 <div style="display: inline-flex;">
 	<div id="imageTypePieChartDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(4)">
         <img src="images/pieChart.png" onclick="setDescriptionType(4)" alt="Pie Chart"> <br>
@@ -1611,7 +1634,8 @@ function askOverallTrends(value){
     </div>
     </span>
 </div>
-<br><br>
+</div>
+<br>
 
 <h2>Enter Image Information</h2>
 <!-- Title -->
@@ -1860,7 +1884,13 @@ Are circles displayed with non-percentage units?
 <div id="circlesUnitsTextDiv" style="display:none">
 What are the circles' units?
 <input type="text" id="circlesUnitsText" oninput="updateDataUnitsText(this.value)" onchange="updateDataUnitsText(this.value)">
-</div><br>
+</div>
+<div id="circlesTextDiv">
+Are circles displayed with text in the circles and intersections?
+<input type="radio" name="circlesText" value="yes" onclick="setCirclesText(true)"> Yes 
+<input type="radio" name="circlesText" value="no" onclick="setCirclesText(false)"> No
+</div>
+<br>
 <div id="circlesColorsDiv">
 Do the circles and/or intersections have different colors?
 <input type="radio" name="circlesColors" value="yes" onclick="setDataColors(true)"> Yes

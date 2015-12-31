@@ -453,109 +453,130 @@ function generateText(){
 // SET TYPE //
 //////////////
 
-function setDescriptionType(value){
-	
+function reloadDescriptionType(value){
 	var confirmChangeType = true;
 	if(descriptionType!==0 && descriptionType !== value){
 		var r = confirm("Changing your image type will cause existing information to be lost. It's recommended that the page be re-loaded between switching image types. Are you sure you want to switch types?");
-		if (r == true) {
-			confirmChangeType = true;
-		} else {
-		    confirmChangeType = false;
-		}
+		confirmChangeType = r;
 	}
-
 	if(descriptionType == value){
 		confirmChangeType = false;
 	}
 
 	if(confirmChangeType){
-		descriptionType = value;
-		var divs = ["imageTypeHorizontalBarChartDiv",
-			"imageTypeVerticalBarChartDiv",
-			"imageTypeLineGraphDiv",
-			"imageTypePieChartDiv",
-			"imageTypeScatterPlotDiv",
-			"imageTypeVennDiagramDiv"];
-		for(i=0;i<6;i++){
-			divID = document.getElementById(divs[i]);
-			divID.style.border = "1px solid gray";		
-			}
-		
-		divID = document.getElementById(divs[descriptionType-1]);
-		divID.style.border = "3px solid red";
-
-		initializeVariables();
-
-		tableRecDivID = document.getElementById("tableRecommendationDiv");
-		askXLabel(false);
-		askXUnits(false);
-		askXValues(false);
-		askYLabel(false);
-		askYUnits(false);
-		askYValues(false);
-		askOverallTrends(false);
-		askBars(false);
-		askLines(false);
-		askPoints(false);
-		askWedges(false);
-		askCircles(false);
-		setBarsClustered(barsClustered);
-		askTable(tableExist);
-		setTable(tableExist);
-		
-		switch(descriptionType){
-			case 1:
-				askXLabel(true);
-				askXUnits(true);
-				askXValues(true);
-				askYLabel(true);
-				askYUnits(true);
-				askOverallTrends(true);
-				askBars(true);
-				tableRecDivID.innerHTML = "A data table is always recommended for bar charts.";
+		switch(value){
+			case 1: //Horizontal Bar Chart
+				window.location.hash = "#horizontalBarChart";
 				break;
-			case 2:
-				askXLabel(true);
-				askXUnits(true);
-				askYLabel(true);
-				askYUnits(true);
-				askYValues(true);
-				askOverallTrends(true);
-				askBars(true);
-				tableRecDivID.innerHTML = "A data table is always recommended for bar charts.";
+			case 2: //Vertical Bar Chart
+				window.location.hash = "#verticalBarChart";
 				break;
-			case 3:
-				askXLabel(true);
-				askXUnits(true);
-				askXValues(true);
-				askYLabel(true);
-				askYUnits(true);
-				askYValues(true);
-				askLines(true);
-				tableRecDivID.innerHTML = "A data table is always recommended for line graphs.";
+			case 3: //Line Graph
+				window.location.hash = "#lineGraph";
 				break;
-			case 4: //Pie Chart (wedges)
-				askWedges(true);
-				tableRecDivID.innerHTML = "A data table is always recommended for pie charts that have wedges labeled with units or percentages.";
+			case 4: //Pie Chart
+				window.location.hash = "#pieChart";
 				break;
-			case 5:
-				askXLabel(true);
-				askXUnits(true);
-				askXValues(true);
-				askYLabel(true);
-				askYUnits(true);
-				askYValues(true);
-				askPoints(true);
-				tableRecDivID.innerHTML = "A data table is only recommended if there are 10 or fewer points per point type.";
+			case 5: //Scatter Plot
+				window.location.hash = "#scatterPlot";
 				break;
-			case 6:
-				askCircles(true);
-				tableRecDivID.innerHTML = "A data table is always recommended for Venn diagrams that have areas labeled with units, percentages, or text.";
+			case 6: //Venn Diagram
+				window.location.hash = "#vennDiagram";
 				break;
 		}
-		askDataQuestions();
+		window.location.reload();
+
 	}
+}
+
+function setDescriptionType(value){
+	
+	descriptionType = value;
+	var divs = ["imageTypeHorizontalBarChartDiv",
+		"imageTypeVerticalBarChartDiv",
+		"imageTypeLineGraphDiv",
+		"imageTypePieChartDiv",
+		"imageTypeScatterPlotDiv",
+		"imageTypeVennDiagramDiv"];
+	for(i=0;i<6;i++){
+		divID = document.getElementById(divs[i]);
+		divID.style.border = "1px solid gray";		
+		}
+	
+	divID = document.getElementById(divs[descriptionType-1]);
+	divID.style.border = "3px solid red";
+
+	initializeVariables();
+
+	tableRecDivID = document.getElementById("tableRecommendationDiv");
+	askXLabel(false);
+	askXUnits(false);
+	askXValues(false);
+	askYLabel(false);
+	askYUnits(false);
+	askYValues(false);
+	askOverallTrends(false);
+	askBars(false);
+	askLines(false);
+	askPoints(false);
+	askWedges(false);
+	askCircles(false);
+	setBarsClustered(barsClustered);
+	askTable(tableExist);
+	setTable(tableExist);
+	
+	switch(descriptionType){
+		case 1:
+			askXLabel(true);
+			askXUnits(true);
+			askXValues(true);
+			askYLabel(true);
+			askYUnits(true);
+			askOverallTrends(true);
+			askBars(true);
+			tableRecDivID.innerHTML = "A data table is always recommended for bar charts.";
+			break;
+		case 2:
+			askXLabel(true);
+			askXUnits(true);
+			askYLabel(true);
+			askYUnits(true);
+			askYValues(true);
+			askOverallTrends(true);
+			askBars(true);
+			tableRecDivID.innerHTML = "A data table is always recommended for bar charts.";
+			break;
+		case 3:
+			askXLabel(true);
+			askXUnits(true);
+			askXValues(true);
+			askYLabel(true);
+			askYUnits(true);
+			askYValues(true);
+			askLines(true);
+			tableRecDivID.innerHTML = "A data table is always recommended for line graphs.";
+			break;
+		case 4: //Pie Chart (wedges)
+			askWedges(true);
+			tableRecDivID.innerHTML = "A data table is always recommended for pie charts that have wedges labeled with units or percentages.";
+			break;
+		case 5:
+			askXLabel(true);
+			askXUnits(true);
+			askXValues(true);
+			askYLabel(true);
+			askYUnits(true);
+			askYValues(true);
+			askPoints(true);
+			tableRecDivID.innerHTML = "A data table is only recommended if there are 10 or fewer points per point type.";
+			break;
+		case 6:
+			askCircles(true);
+			tableRecDivID.innerHTML = "A data table is always recommended for Venn diagrams that have areas labeled with units, percentages, or text.";
+			break;
+	}
+	askDataQuestions();
+
 
 }
 
@@ -1604,33 +1625,33 @@ function askOverallTrends(value){
 <h2>Select Image Type</h2>
 <div style="width: 100%; text-align: center;">
 <div style="display: inline-flex;">
-	<div id="imageTypePieChartDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(4)">
-        <img src="images/pieChart.png" onclick="setDescriptionType(4)" alt="Pie Chart"> <br>
-        <input type="radio" name="type" value="pieChart" onclick="setDescriptionType(4)" style="display:none"> Pie Chart
+	<div id="imageTypePieChartDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="reloadDescriptionType(4)">
+        <img src="images/pieChart.png" onclick="reloadDescriptionType(4)" alt="Pie Chart"> <br>
+        <input type="radio" name="type" value="pieChart" onclick="reloadDescriptionType(4)" style="display:none"> Pie Chart
     </div>
 
-    <div id="imageTypeHorizontalBarChartDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(1)">
-        <img src="images/horizontalBarChart.png" onclick="setDescriptionType(1)" alt="Horizontal Bar Chart (Lines Oriented Left-Right)"> <br>
-        <input type="radio" name="type" value="horizontalBarChart" onclick="setDescriptionType(1)" style="display:none"> Horizontal<br>Bar Chart
+    <div id="imageTypeHorizontalBarChartDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="reloadDescriptionType(1)">
+        <img src="images/horizontalBarChart.png" onclick="reloadDescriptionType(1)" alt="Horizontal Bar Chart (Lines Oriented Left-Right)"> <br>
+        <input type="radio" name="type" value="horizontalBarChart" onclick="reloadDescriptionType(1)" style="display:none"> Horizontal<br>Bar Chart
     </div>
 
-    <div id="imageTypeVerticalBarChartDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(2)">
-        <img src="images/verticalBarChart.png" onclick="setDescriptionType(2)" alt="Vertical Bar Chart (Lines Oriented Up-Down)"> <br>
-        <input type="radio" name="type" value="verticalBarChart" onclick="setDescriptionType(2)" style="display:none"> Vertical<br>Bar Chart
+    <div id="imageTypeVerticalBarChartDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="reloadDescriptionType(2)">
+        <img src="images/verticalBarChart.png" onclick="reloadDescriptionType(2)" alt="Vertical Bar Chart (Lines Oriented Up-Down)"> <br>
+        <input type="radio" name="type" value="verticalBarChart" onclick="reloadDescriptionType(2)" style="display:none"> Vertical<br>Bar Chart
     </div>
 
-    <div id="imageTypeLineGraphDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(3)">
-        <img src="images/lineGraph.png" onclick="setDescriptionType(3)" alt="Line Graph with One or More Line Types"> <br>
-        <input type="radio" name="type" value="lineGraph" onclick="setDescriptionType(3)" style="display:none"> Line Graph
+    <div id="imageTypeLineGraphDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="reloadDescriptionType(3)">
+        <img src="images/lineGraph.png" onclick="reloadDescriptionType(3)" alt="Line Graph with One or More Line Types"> <br>
+        <input type="radio" name="type" value="lineGraph" onclick="reloadDescriptionType(3)" style="display:none"> Line Graph
     </div>
 
-    <div id="imageTypeVennDiagramDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(6)">
-        <img src="images/vennDiagram.png" onclick="setDescriptionType(6)" alt="Venn Diagram"> <br>
-        <input type="radio" name="type" value="vennDiagram" onclick="setDescriptionType(6)" style="display:none"> Venn Diagram
+    <div id="imageTypeVennDiagramDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="reloadDescriptionType(6)">
+        <img src="images/vennDiagram.png" onclick="reloadDescriptionType(6)" alt="Venn Diagram"> <br>
+        <input type="radio" name="type" value="vennDiagram" onclick="reloadDescriptionType(6)" style="display:none"> Venn Diagram
     </div>
-    <div id="imageTypeScatterPlotDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="setDescriptionType(5)">
-        <img src="images/scatterPlot.png" onclick="setDescriptionType(5)" alt="Scatter Plot with One or More Point Types"> <br>
-        <input type="radio" name="type" value="scatterPlot" onclick="setDescriptionType(5)" style="display:none"> Scatter Plot
+    <div id="imageTypeScatterPlotDiv" style="display:inline-block; background-color:white; border-radius: 25px; padding: 20px; width: 90px; height: 100px; border: 1px solid gray; text-align:center; margin:5px;" onclick="reloadDescriptionType(5)">
+        <img src="images/scatterPlot.png" onclick="reloadDescriptionType(5)" alt="Scatter Plot with One or More Point Types"> <br>
+        <input type="radio" name="type" value="scatterPlot" onclick="reloadDescriptionType(5)" style="display:none"> Scatter Plot
     </div>
     </span>
 </div>
@@ -1951,7 +1972,15 @@ Do you want to create a data table?
 <p>This tool was based on the research published in:<br>
 Morash, V., Siu, Y. -T., Miele, J.A., Hasty, L., & Landau, S. (2015). Guiding novice web workers in making image descriptions using templates. <i>ACM Transactions on Accessible Computing</i>, accepted.
 </p><br>
-<p>To report bugs or provide suggestions, please contact me at <a href="mailto:val@ski.org">val@ski.org</a></p>
+<p>To report bugs or provide suggestions, please contact me at <a href="mailto:val@ski.org">val@ski.org</a></p><br>
+
+
+<h2>Recommendations</h2>
+<h3>Options for PDFs (from Ed Summers)</h3>
+<ol style="padding:20px">
+<li>Inline image description is a text description, tables, etc that are located within the mainline text near the original image. If you go this route make sure you include a link at the beginning of the image description that allows all users to skip the image description and continue reading the mainline text.</li>
+<li>Out of line image description is a text description, tables, etc that are located in an appendix that is part of the original document and located after the mainline text.  If you go this route make sure you create a link near the original image within the mainline text so all users can quickly jump from the image to it’s description. And, within that image description in the appendix include a “return to this image in the lainline text” link that allows users to quickly jump back to the original image in the mainline text so they can continue reading the mainline text from where they left off.</li>
+</ol>
 </form>
 <div class="cl">&nbsp;</div>
     </div>
@@ -1992,6 +2021,27 @@ askWedges(false);
 askCircles(false);
 askTable(tableExist);
 
+
+switch(window.location.hash){
+	case "#horizontalBarChart": //Horizontal Bar Chart
+		setDescriptionType(1);
+		break;
+	case "#verticalBarChart": //Vertical Bar Chart
+		setDescriptionType(2);
+		break;
+	case "#lineGraph": //Line Graph
+		setDescriptionType(3);
+		break;
+	case "#pieChart": //Pie Chart
+		setDescriptionType(4);
+		break;
+	case "#scatterPlot": //Scatter Plot
+		setDescriptionType(5);
+		break;
+	case "#vennDiagram": //Venn Diagram
+		setDescriptionType(6);
+		break;
+}
 
 //-->
 </script>

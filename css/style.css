@@ -388,6 +388,7 @@ textarea {
 #navbar li ul {
 	display: none; 
 	position: absolute;
+	z-index:999;
 	background-color: #dbdbdb;}
 
 #navbar li:hover ul {
